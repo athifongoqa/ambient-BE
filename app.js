@@ -16,6 +16,8 @@ module.exports = async function (fastify, opts) {
     options: Object.assign({}, opts)
   })
 
+  fastify.after(err => err?console.log(err):console.log('MongoDB Plugin is ready.'))
+
   // This loads all plugins defined in routes
   // define your routes in one of these
   fastify.register(AutoLoad, {
