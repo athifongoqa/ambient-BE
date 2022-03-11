@@ -31,17 +31,17 @@ module.exports = fp(async function (fastify, opts) {
           properties: {
             id: { type: "string", format: "uuid" },
             username: { type: "string" },
-            profile_pic: { type: "string", format: "url" },
+            profile_pic: { type: "string", format: "hostname" },
             email: { type: "string", format: "email" },
             display_name: { type: "string" },
             accounts: {
               type: "object",
               properties: {
-                spotify_url: { type: "string", format: "url" },
-                twitter_url: { type: "string", format: "url" },
-                tiktok_url: { type: "string", format: "url" },
-                linktree_url: { type: "string", format: "url" },
-                instagram_url: { type: "string", format: "url" },
+                spotify_url: { type: "string", format: "uri" },
+                twitter_url: { type: "string", format: "uri" },
+                tiktok_url: { type: "string", format: "uri" },
+                linktree_url: { type: "string", format: "uri" },
+                instagram_url: { type: "string", format: "uri" },
               },
             },
           },
