@@ -8,7 +8,7 @@ module.exports = fp(async function (fastify, opts) {
     swagger: {
       info: {
         title: "ambient",
-        description: "Testing the Fastify swagger API",
+        description: "API Documentation for ambient",
         version: "0.1.0",
       },
       externalDocs: {
