@@ -73,9 +73,35 @@ const createShow = (req, reply) => {
 };
 
 const updateShow = (req, reply) => {
-  const updatedShow = req.body;
+  const { id } = req.params;
+  const {
+    name,
+    description,
+    type,
+    date_scheduled,
+    date_ended,
+    participants_id,
+  } = req.body;
 
-  shows.filter((show) => show._id !== updatedShow._id);
+  const { _id, creator_id, date_created } = shows.find(
+    (show) => show._id === id
+  );
+
+  const updatedShow = {
+    _id,
+    creator_id,
+    name,
+    description,
+    type,
+    date_created,
+    date_scheduled,
+    date_ended,
+    participants_id,
+  };
+
+  shows = shows.map((show) => (show._id === id ? updatedShow : show));
+
+  reply.send(updatedShow);
 };
 
 const deleteShow = (req, reply) => {
@@ -90,4 +116,5 @@ module.exports = {
   getShows,
   createShow,
   deleteShow,
+  updateShow,
 };

@@ -5,6 +5,7 @@ const {
   getShows,
   createShow,
   deleteShow,
+  updateShow,
 } = require("../../controllers/shows");
 
 const Show = {
@@ -102,6 +103,26 @@ const deleteShowOpts = {
   handler: deleteShow,
 };
 
+const updateShowOpts = {
+  schema: {
+    params: {
+      id: {
+        type: "string",
+        description: "Numeric value of show to update",
+      },
+    },
+    body: Show,
+    tags: ["show"],
+    response: {
+      200: {
+        ...Show,
+        description: "Updated show",
+      },
+    },
+  },
+  handler: updateShow,
+};
+
 module.exports = async function (fastify, opts) {
   // Get all shows
   fastify.get("/", getShowsOpts);
@@ -114,4 +135,7 @@ module.exports = async function (fastify, opts) {
 
   // Delete a show
   fastify.delete("/:id", deleteShowOpts);
+
+  // Update a show
+  fastify.put("/:id", updateShowOpts);
 };
