@@ -20,7 +20,6 @@ module.exports = async function (fastify, opts) {
   });
 
   fastify.post("/", async (req, reply) => {
-    // Validate Email
     if (!validator.isEmail(req.body.email)) {
       reply.send({ message: "Please use a valid email address." });
       return;
