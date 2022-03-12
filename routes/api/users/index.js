@@ -1,6 +1,6 @@
 "use strict";
 
-const User = require("../../models/user");
+const User = require("../../../models/user");
 const validator = require("validator");
 
 module.exports = async function (fastify, opts) {
@@ -8,18 +8,18 @@ module.exports = async function (fastify, opts) {
     alwaysOn: true,
   });
 
-  fastify.get("/users", async function (req, reply) {
+  fastify.get("/", async function (req, reply) {
     const users = await User.find();
     reply.send({ allUsers: users });
   });
 
-  fastify.get("/users/:username", async function (req, reply) {
+  fastify.get("/:username", async function (req, reply) {
     const username = req.params.username;
     let user = await User.findOne({ username: username });
     reply.send({ requestedUser: user });
   });
 
-  fastify.post("/users", async (req, reply) => {
+  fastify.post("/", async (req, reply) => {
     // Validate Email
     if (!validator.isEmail(req.body.email)) {
       reply.send({ message: "Please use a valid email address." });
@@ -31,7 +31,7 @@ module.exports = async function (fastify, opts) {
     reply.send({ addedUser: returnedUser });
   });
 
-  fastify.patch("/users/:id", async function (req, reply) {
+  fastify.patch("/:id", async function (req, reply) {
     const id = req.params.id;
     let updatedUser = await User.findByIdAndUpdate(id, req.body, {
       new: true,
@@ -39,7 +39,7 @@ module.exports = async function (fastify, opts) {
     reply.send({ updatedUser: updatedUser });
   });
 
-  fastify.delete("/users/:id", async function (req, reply) {
+  fastify.delete("/:id", async function (req, reply) {
     const id = req.params.id;
     let deletedUser = await User.findByIdAndDelete(id);
     reply.send({ message: `${deletedUser.id} has been deleted` });
