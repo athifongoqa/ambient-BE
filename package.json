@@ -25,8 +25,11 @@
     "fastify-autoload": "^3.10.0",
     "fastify-cli": "^2.15.0",
     "fastify-error": "^0.3.1",
+    "fastify-formbody": "^5.2.0",
+    "fastify-mongodb": "^4.1.1",
     "fastify-oauth2": "^4.5.0",
     "fastify-plugin": "^3.0.0",
+    "fastify-prettier": "^1.1.9",
     "fastify-sensible": "^3.1.2",
     "fastify-warning": "^0.2.0",
     "fastq": "^1.13.0",
@@ -37,6 +40,7 @@
     "json-schema-traverse": "^0.4.1",
     "light-my-request": "^4.7.1",
     "lru-cache": "^6.0.0",
+    "mongoose": "^6.2.5",
     "ms": "^2.1.2",
     "pino": "^6.13.4",
     "pino-std-serializers": "^3.2.0",
@@ -58,6 +62,7 @@
     "string-similarity": "^4.0.4",
     "tiny-lru": "^7.0.6",
     "uri-js": "^4.4.1",
+    "validator": "^13.7.0",
     "yallist": "^4.0.0"
   },
   "devDependencies": {
