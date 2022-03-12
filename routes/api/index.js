@@ -13,9 +13,11 @@ module.exports = async function (fastify, opts) {
       reply.send({allUsers: users})
     });
 
-    // fastify.get('/user/:username', async function (req, reply) {
-        
-    // });
+    fastify.get('/user/:username', async function (req, reply) {
+      const username = req.params.username
+      let user = await User.findOne({username: username})
+      reply.send({requestedUser: user})
+    });
 
     fastify.post('/user', async (req, reply) => {
       let user = new User(req.body)
