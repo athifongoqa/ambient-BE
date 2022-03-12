@@ -1,40 +1,6 @@
 "use strict";
 
-const shows = [
-  {
-    _id: "1",
-    creator_id: "2",
-    name: "Show 1",
-    description: "This is the first show",
-    type: "public",
-    date_created: "2020-01-01T20:00:00.000Z",
-    date_scheduled: "2020-01-01T21:00:00.000Z",
-    date_ended: "2020-01-01T21:01:00.000Z",
-    participants_id: ["1", "2", "3"],
-  },
-  {
-    _id: "2",
-    creator_id: "2",
-    name: "Show 2",
-    description: "This is the second show",
-    type: "public",
-    date_created: "2020-01-01T20:00:00.000Z",
-    date_scheduled: "2020-01-01T21:00:00.000Z",
-    date_ended: "2020-01-01T21:01:00.000Z",
-    participants_id: ["2", "3"],
-  },
-  {
-    _id: "3",
-    creator_id: "1",
-    name: "Show 3",
-    description: "This is the third show",
-    type: "public",
-    date_created: "2020-01-01T20:00:00.000Z",
-    date_scheduled: "2020-01-01T21:00:00.000Z",
-    date_ended: "2020-01-01T21:01:00.000Z",
-    participants_id: ["1", "3"],
-  },
-];
+const { getShow, getShows, createShow } = require("../../controllers/shows");
 
 const Show = {
   type: "object",
@@ -65,9 +31,7 @@ const getShowsOpts = {
       },
     },
   },
-  handler: async function (req, reply) {
-    reply.send(shows);
-  },
+  handler: getShows,
 };
 
 const getShowOpts = {
@@ -80,19 +44,28 @@ const getShowOpts = {
       },
     },
   },
-  handler: async function (req, reply) {
-    const { id } = req.params;
-    const show = shows.find((show) => show._id === id);
-    reply.send(show);
+  handler: getShow,
+};
+
+const postShowOpts = {
+  schema: {
+    tags: ["show"],
+    response: {
+      201: {
+        ...Show,
+        description: "Create a new show",
+      },
+    },
   },
+  handler: createShow,
 };
 
 module.exports = async function (fastify, opts) {
+  // Get all shows
   fastify.get("/", getShowsOpts);
 
+  // Get single show
   fastify.get("/:id", getShowOpts);
 
-  // fastify.post("/", postShowOpts, async function (req, reply) {
-  //   reply.send(show);
-  // });
+  fastify.post("/", postShowOpts);
 };
