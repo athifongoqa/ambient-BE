@@ -14,7 +14,7 @@ module.exports = async function (fastify, opts) {
       reply.send({allUsers: users})
     });
 
-    fastify.get('/user/:username', async function (req, reply) {
+    fastify.get('/users/:username', async function (req, reply) {
       const username = req.params.username
       let user = await User.findOne({username: username})
       reply.send({requestedUser: user})
