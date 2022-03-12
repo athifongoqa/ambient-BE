@@ -25,9 +25,13 @@ module.exports = async function (fastify, opts) {
       reply.send({addedUser: returnedUser}) 
     });
 
-    // fastify.patch('/user/:username', async function (req, reply) {
-        
-    // });
+    fastify.patch('/user/:id', async function (req, reply) {
+      const id = req.params.id
+      let updatedUser = await User.findByIdAndUpdate(id, req.body, {
+         new: true
+      })
+      reply.send({updatedUser: updatedUser})
+    });
 
     fastify.delete('/user/:id', async function (req, reply) {
       const id = req.params.id
