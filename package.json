@@ -25,6 +25,7 @@
     "fastify-autoload": "^3.10.0",
     "fastify-cli": "^2.15.0",
     "fastify-error": "^0.3.1",
+    "fastify-formbody": "^5.2.0",
     "fastify-mongodb": "^4.1.1",
     "fastify-oauth2": "^4.5.0",
     "fastify-plugin": "^3.0.0",

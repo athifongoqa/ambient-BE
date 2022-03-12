@@ -17,9 +17,11 @@ module.exports = async function (fastify, opts) {
         
     // });
 
-    // fastify.post('/user', async (request, reply) => {
-        
-    // });
+    fastify.post('/user', async (req, reply) => {
+      let user = new User(req.body)
+      let returnedUser = await user.save()
+      reply.send({addedUser: returnedUser}) 
+    });
 
     // fastify.patch('/user/:username', async function (req, reply) {
         
