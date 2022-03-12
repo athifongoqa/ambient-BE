@@ -72,8 +72,22 @@ const createShow = (req, reply) => {
   reply.code(201).send(newShow);
 };
 
+const updateShow = (req, reply) => {
+  const updatedShow = req.body;
+
+  shows.filter((show) => show._id !== updatedShow._id);
+};
+
+const deleteShow = (req, reply) => {
+  const { id } = req.params;
+
+  shows = shows.filter((show) => show._id !== id);
+  reply.send(`Show ${id} has been deleted`);
+};
+
 module.exports = {
   getShow,
   getShows,
   createShow,
+  deleteShow,
 };

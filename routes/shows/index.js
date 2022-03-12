@@ -1,6 +1,11 @@
 "use strict";
 
-const { getShow, getShows, createShow } = require("../../controllers/shows");
+const {
+  getShow,
+  getShows,
+  createShow,
+  deleteShow,
+} = require("../../controllers/shows");
 
 const Show = {
   type: "object",
@@ -36,6 +41,12 @@ const getShowsOpts = {
 
 const getShowOpts = {
   schema: {
+    params: {
+      id: {
+        type: "string",
+        description: "Numeric value of show to get",
+      },
+    },
     tags: ["show"],
     response: {
       200: {
@@ -50,6 +61,16 @@ const getShowOpts = {
 const postShowOpts = {
   schema: {
     tags: ["show"],
+    body: {
+      required: [
+        "creator_id",
+        "name",
+        "description",
+        "date_created",
+        "date_scheduled",
+      ],
+      ...Show,
+    },
     response: {
       201: {
         ...Show,
@@ -60,6 +81,27 @@ const postShowOpts = {
   handler: createShow,
 };
 
+const deleteShowOpts = {
+  schema: {
+    params: {
+      id: {
+        type: "string",
+        description: "Numeric value of show to delete",
+      },
+    },
+    tags: ["show"],
+    response: {
+      200: {
+        type: "object",
+        properties: {
+          message: { type: "string" },
+        },
+      },
+    },
+  },
+  handler: deleteShow,
+};
+
 module.exports = async function (fastify, opts) {
   // Get all shows
   fastify.get("/", getShowsOpts);
@@ -67,5 +109,9 @@ module.exports = async function (fastify, opts) {
   // Get single show
   fastify.get("/:id", getShowOpts);
 
+  // Create a new show
   fastify.post("/", postShowOpts);
+
+  // Delete a show
+  fastify.delete("/:id", deleteShowOpts);
 };
