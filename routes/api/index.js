@@ -29,7 +29,9 @@ module.exports = async function (fastify, opts) {
         
     // });
 
-    // fastify.delete('/user/:username', async function (req, reply) {
-        
-    // });
+    fastify.delete('/user/:id', async function (req, reply) {
+      const id = req.params.id
+      let deletedUser = await User.findByIdAndDelete(id)
+      reply.send({message: `${deletedUser.id} has been deleted`})
+    });
 }
