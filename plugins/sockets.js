@@ -29,6 +29,12 @@ module.exports = fp(async function (fastify, opts) {
         console.log('calling', socketId);
         socket.broadcast.to(socketId).emit('called', get_participant_with_socket(participant))
       });
+
+      socket.on('leave-show', (room) => {
+        socket.leave(room); 
+        console.log(socket.id, "left", room)
+        socket.broadcast.to(room).emit('user-left-show', socket.id)
+      })
     });
   })
 })
