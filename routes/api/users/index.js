@@ -27,7 +27,7 @@ module.exports = async function (fastify, opts) {
 
     let user = new User(req.body);
     let returnedUser = await user.save();
-    reply.send({ addedUser: returnedUser });
+    reply.code(201).send({ addedUser: returnedUser });
   });
 
   fastify.patch("/:id", async function (req, reply) {
