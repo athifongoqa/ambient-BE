@@ -35,6 +35,11 @@ module.exports = fp(async function (fastify, opts) {
         console.log(socket.id, "left", room)
         socket.broadcast.to(room).emit('user-left-show', socket.id)
       })
+
+      socket.on('disconnect', (reason) => {
+        console.log('user disconnected')
+        console.log(reason, socket.rooms, socket.id)
+      })
     });
   })
 })
