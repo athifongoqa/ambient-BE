@@ -41,9 +41,9 @@ const getShows = async (req, reply) => {
   reply.send(shows);
 };
 
-const getShow = (req, reply) => {
+const getShow = async function (req, reply) {
   const { id } = req.params;
-  const show = shows.find((show) => show._id === id);
+  let show = await Show.findOne({ _id: id });
   reply.send(show);
 };
 
