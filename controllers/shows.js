@@ -62,11 +62,11 @@ const updateShow = async (req, reply) => {
   reply.send(updatedShow);
 };
 
-const deleteShow = (req, reply) => {
+const deleteShow = async (req, reply) => {
   const { id } = req.params;
 
-  dummyShows = dummyShows.filter((show) => show._id !== id);
-  reply.send(`Show ${id} has been deleted`);
+  const deletedShow = await Show.findByIdAndDelete(id);
+  reply.send({ message: `${deletedShow.id} has been deleted` });
 };
 
 module.exports = {
