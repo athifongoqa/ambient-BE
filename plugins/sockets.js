@@ -56,6 +56,11 @@ module.exports = fp(async function (fastify, opts) {
         callback({message, user})
         socket.to(showId).emit('message-receive', {message, user})
       })
+
+      socket.on('toggle-mute', (showId, peerId, isMuted) => {
+        console.log('mute event');
+        socket.broadcast.to(showId).emit('toggle-mute', peerId, isMuted);
+      })
     });
   })
 })
