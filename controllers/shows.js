@@ -53,34 +53,11 @@ const createShow = async (req, reply) => {
   reply.code(201).send(returnedShow);
 };
 
-const updateShow = (req, reply) => {
+const updateShow = async (req, reply) => {
   const { id } = req.params;
-  const {
-    name,
-    description,
-    type,
-    date_scheduled,
-    date_ended,
-    participants_id,
-  } = req.body;
-
-  const { _id, creator_id, date_created } = dummyShows.find(
-    (show) => show._id === id
-  );
-
-  const updatedShow = {
-    _id,
-    creator_id,
-    name,
-    description,
-    type,
-    date_created,
-    date_scheduled,
-    date_ended,
-    participants_id,
-  };
-
-  dummyShows = dummyShows.map((show) => (show._id === id ? updatedShow : show));
+  const updatedShow = await Show.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
 
   reply.send(updatedShow);
 };
