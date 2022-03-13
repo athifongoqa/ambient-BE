@@ -6,7 +6,7 @@ const {
   createShow,
   deleteShow,
   updateShow,
-} = require("../../controllers/shows");
+} = require("../../../controllers/shows");
 
 const Show = {
   type: "object",
@@ -124,6 +124,9 @@ const updateShowOpts = {
 };
 
 module.exports = async function (fastify, opts) {
+  fastify.register(require("fastify-prettier"), {
+    alwaysOn: true,
+  });
   // Get all shows
   fastify.get("/", getShowsOpts);
 

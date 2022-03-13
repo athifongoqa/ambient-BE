@@ -34,8 +34,11 @@ let shows = [
   },
 ];
 
-const getShows = (req, reply) => {
-  reply.send(shows);
+const Show = require("../models/show.model");
+
+const getShows = async (req, reply) => {
+  const shows = await Show.find();
+  reply.send({ allShows: shows });
 };
 
 const getShow = (req, reply) => {
