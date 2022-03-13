@@ -50,6 +50,12 @@ module.exports = fp(async function (fastify, opts) {
         console.log(toUserId, playerState)
         socket.broadcast.to(toUserId).emit('playback-updated', playerState)
       })
+
+      socket.on('message-send', ({showId, message, user}, callback) => {
+        console.log(`${user.displayName} says: ${message}`)
+        callback({message, user})
+        socket.to(showId).emit('message-receive', {message, user})
+      })
     });
   })
 })
