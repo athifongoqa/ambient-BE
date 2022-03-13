@@ -23,7 +23,11 @@ module.exports = fp(async function (fastify, opts) {
         socket.join(roomId);
         console.log("user joined", io.sockets.adapter.rooms);
         socket.broadcast.to(roomId).emit('user-joined-show', get_participant_with_socket(participant));
-      
+      });
+
+      socket.on('call', ({participant, socketId}) => {
+        console.log('calling', socketId);
+        socket.broadcast.to(socketId).emit('called', get_participant_with_socket(participant))
       });
     });
   })
