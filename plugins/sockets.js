@@ -34,33 +34,33 @@ module.exports = fp(async function (fastify, opts) {
         socket.leave(room); 
         console.log(socket.id, "left", room)
         socket.broadcast.to(room).emit('user-left-show', socket.id)
-      })
+      });
 
       socket.on('disconnect', (reason) => {
         console.log('user disconnected')
         console.log(reason, socket.rooms, socket.id)
-      })
+      });
 
       socket.on('playback-update', ({playerState, showId}) => {
         console.log(showId)
         socket.broadcast.to(showId).emit('playback-updated', playerState)
-      })
+      });
 
       socket.on('playback-initial-sync', ({toUserId, playerState}) => {
         console.log(toUserId, playerState)
         socket.broadcast.to(toUserId).emit('playback-updated', playerState)
-      })
+      });
 
       socket.on('message-send', ({showId, message, user}, callback) => {
         console.log(`${user.displayName} says: ${message}`)
         callback({message, user})
         socket.to(showId).emit('message-receive', {message, user})
-      })
+      });
 
       socket.on('toggle-mute', (showId, peerId, isMuted) => {
         console.log('mute event');
         socket.broadcast.to(showId).emit('toggle-mute', peerId, isMuted);
-      })
+      });
     });
-  })
-})
+  });
+});
