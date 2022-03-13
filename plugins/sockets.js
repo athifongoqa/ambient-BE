@@ -45,6 +45,11 @@ module.exports = fp(async function (fastify, opts) {
         console.log(showId)
         socket.broadcast.to(showId).emit('playback-updated', playerState)
       })
+
+      socket.on('playback-initial-sync', ({toUserId, playerState}) => {
+        console.log(toUserId, playerState)
+        socket.broadcast.to(toUserId).emit('playback-updated', playerState)
+      })
     });
   })
 })
