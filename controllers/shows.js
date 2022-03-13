@@ -1,4 +1,4 @@
-let shows = [
+let dummyShows = [
   {
     _id: "1",
     creator_id: "2",
@@ -38,7 +38,7 @@ const Show = require("../models/show.model");
 
 const getShows = async (req, reply) => {
   const shows = await Show.find();
-  reply.send({ allShows: shows });
+  reply.send(shows);
 };
 
 const getShow = (req, reply) => {
@@ -86,7 +86,7 @@ const updateShow = (req, reply) => {
     participants_id,
   } = req.body;
 
-  const { _id, creator_id, date_created } = shows.find(
+  const { _id, creator_id, date_created } = dummyShows.find(
     (show) => show._id === id
   );
 
@@ -102,7 +102,7 @@ const updateShow = (req, reply) => {
     participants_id,
   };
 
-  shows = shows.map((show) => (show._id === id ? updatedShow : show));
+  dummyShows = dummyShows.map((show) => (show._id === id ? updatedShow : show));
 
   reply.send(updatedShow);
 };
@@ -110,7 +110,7 @@ const updateShow = (req, reply) => {
 const deleteShow = (req, reply) => {
   const { id } = req.params;
 
-  shows = shows.filter((show) => show._id !== id);
+  dummyShows = dummyShows.filter((show) => show._id !== id);
   reply.send(`Show ${id} has been deleted`);
 };
 
