@@ -40,6 +40,11 @@ module.exports = fp(async function (fastify, opts) {
         console.log('user disconnected')
         console.log(reason, socket.rooms, socket.id)
       })
+
+      socket.on('playback-update', ({playerState, showId}) => {
+        console.log(showId)
+        socket.broadcast.to(showId).emit('playback-updated', playerState)
+      })
     });
   })
 })
