@@ -47,32 +47,10 @@ const getShow = async function (req, reply) {
   reply.send(show);
 };
 
-const createShow = (req, reply) => {
-  const {
-    _id = "4",
-    creator_id = "1",
-    name = "No name show",
-    description = "No description yet",
-    type = "live",
-    date_created = Date.now(),
-    date_scheduled = Date.now(),
-    date_ended = Date.now() + 1,
-  } = req.body;
-
-  const newShow = {
-    _id,
-    creator_id,
-    name,
-    description,
-    type,
-    date_created,
-    date_scheduled,
-    date_ended,
-  };
-  console.log(newShow);
-
-  shows = [...shows, newShow];
-  reply.code(201).send(newShow);
+const createShow = async (req, reply) => {
+  const show = new Show(req.body);
+  const returnedShow = await show.save();
+  reply.code(201).send(returnedShow);
 };
 
 const updateShow = (req, reply) => {

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const ShowSchema = new mongoose.Schema({
   creator_id: {
-    type: mongoose.Types.ObjectId,
+    type: String,
     required: true,
   },
   name: {
@@ -31,7 +31,7 @@ const ShowSchema = new mongoose.Schema({
     type: Date,
     default: undefined,
   },
-  participants_id: [{ Type: mongoose.Types.ObjectId }],
+  participants_id: [{ type: String }],
 });
 
 module.exports = mongoose.models.Show || mongoose.model("Show", ShowSchema);
