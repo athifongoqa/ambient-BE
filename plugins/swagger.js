@@ -15,7 +15,7 @@ module.exports = fp(async function (fastify, opts) {
         url: "https://github.com/athifongoqa/ambient-BE/",
         description: "Check out the GitHub Repo",
       },
-      host: "localhost:3000",
+      host: "localhost:3000/",
       schemes: ["http"],
       consumes: ["application/json"],
       produces: ["application/json"],
@@ -56,7 +56,7 @@ module.exports = fp(async function (fastify, opts) {
       },
     },
     uiConfig: {
-      docExpansion: "full",
+      // docExpansion: "full",
       deepLinking: false,
     },
     uiHooks: {
