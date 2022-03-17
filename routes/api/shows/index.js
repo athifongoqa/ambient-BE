@@ -11,7 +11,6 @@ const {
 const Show = {
   type: "object",
   properties: {
-    _id: { type: "string", format: "uuid" },
     creator_id: { type: "string", format: "uuid" },
     name: { type: "string" },
     description: { type: "string" },
