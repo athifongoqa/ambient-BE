@@ -72,10 +72,9 @@
     "tap": "^15.1.6"
   },
   "scripts": {
-    "test": "tap \"test/**/*.test.js\"",
     "start": "fastify start -l info app.js",
     "dev": "fastify start -w -l info -P app.js",
-    "jest-test": "jest"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
