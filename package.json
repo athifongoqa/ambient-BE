@@ -68,12 +68,14 @@
     "yallist": "^4.0.0"
   },
   "devDependencies": {
+    "jest": "^27.5.1",
     "tap": "^15.1.6"
   },
   "scripts": {
     "test": "tap \"test/**/*.test.js\"",
     "start": "fastify start -l info app.js",
-    "dev": "fastify start -w -l info -P app.js"
+    "dev": "fastify start -w -l info -P app.js",
+    "jest-test": "jest"
   },
   "repository": {
     "type": "git",
