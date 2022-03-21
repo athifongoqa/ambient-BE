@@ -62,6 +62,7 @@
     "set-cookie-parser": "^2.4.8",
     "sonic-boom": "^1.4.1",
     "string-similarity": "^4.0.4",
+    "supertest": "^6.2.2",
     "tiny-lru": "^7.0.6",
     "uri-js": "^4.4.1",
     "validator": "^13.7.0",
@@ -69,6 +70,7 @@
   },
   "devDependencies": {
     "jest": "^27.5.1",
+    "mockingoose": "^2.15.2",
     "tap": "^15.1.6"
   },
   "scripts": {
