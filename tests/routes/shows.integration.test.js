@@ -13,10 +13,10 @@ describe("shows integration tests", () => {
   });
 
   test("default shows route", async () => {
-    const response = await request(app.server).get("/api/shows/");
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
-    expect(response.body[0]).toHaveProperty("description");
-    expect(response.body).not.toHaveLength(0);
+    const { statusCode, body } = await request(app.server).get("/api/shows/");
+    expect(statusCode).toBe(200);
+    expect(body).toBeInstanceOf(Array);
+    expect(body[0]).toHaveProperty("description");
+    expect(body).not.toHaveLength(0);
   });
 });
