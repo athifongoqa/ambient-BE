@@ -1,4 +1,5 @@
 "use strict";
+const userController = require("../../../controllers/users");
 
 const User = require("../../../models/user");
 const validator = require("validator");
@@ -19,16 +20,7 @@ module.exports = async function (fastify, opts) {
     reply.send({ requestedUser: user });
   });
 
-  fastify.post("/", async (req, reply) => {
-    if (!validator.isEmail(req.body.email)) {
-      reply.send({ message: "Please use a valid email address." });
-      return;
-    }
-
-    let user = new User(req.body);
-    let returnedUser = await user.save();
-    reply.code(201).send({ addedUser: returnedUser });
-  });
+  fastify.post("/", userController.addNewUser);
 
   fastify.patch("/:id", async function (req, reply) {
     const id = req.params.id;

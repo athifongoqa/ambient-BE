@@ -7,6 +7,7 @@
     "test": "test"
   },
   "dependencies": {
+    "boom": "^7.3.0",
     "fastify": "^3.0.0",
     "fastify-autoload": "^3.10.0",
     "fastify-cli": "^2.15.0",
