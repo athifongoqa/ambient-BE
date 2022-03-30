@@ -6,7 +6,7 @@ describe("shows integration tests", () => {
 
   beforeAll(async () => {
     app = await build();
-  });
+  }, 15000);
 
   afterAll(async () => {
     await app.close();

@@ -1,4 +1,4 @@
-const build = require("./helper").build;
+const { build } = require("./helper");
 const request = require("supertest");
 
 describe("root tests", () => {
@@ -6,7 +6,7 @@ describe("root tests", () => {
 
   beforeAll(async () => {
     app = await build();
-  });
+  }, 15000);
 
   afterAll(async () => {
     await app.close();
