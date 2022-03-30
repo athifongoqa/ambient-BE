@@ -5,6 +5,7 @@ const {
   getShows,
   createShow,
   updateShow,
+  deleteShow,
 } = require("../../controllers/shows.js");
 
 describe("Shows routes", () => {
@@ -145,6 +146,47 @@ describe("Shows routes", () => {
 
     // Assert
     expect(response).toHaveProperty("name", "Test Show Name Updated");
+    expect(response).toBeInstanceOf(Object);
+    expect(reply.send).toBeCalledTimes(1);
+  });
+
+  it("Delete a show", async () => {
+    // Arrange
+    const showInput = {
+      _id: "622d46cd755a74341a120491",
+      creator_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      name: "No name show 10",
+      description: "No description yet",
+      type: "live",
+      date_created: "2020-01-01T20:00:00.000+00:00",
+      date_scheduled: "2020-01-01T20:00:00.000+00:00",
+      date_ended: "2020-01-01T20:00:00.000+00:00",
+    };
+
+    const req = {
+      params: {
+        id: showInput._id,
+      },
+    };
+
+    const reply = {
+      send: jest.fn().mockImplementation((res) => {
+        response = res;
+      }),
+    };
+
+    mockingoose(ShowModel).toReturn(showInput, "findOneAndRemove");
+
+    let response;
+
+    // Act
+    await deleteShow(req, reply);
+
+    // Assert
+    expect(response).toHaveProperty(
+      "message",
+      `${req.params.id} has been deleted`
+    );
     expect(response).toBeInstanceOf(Object);
     expect(reply.send).toBeCalledTimes(1);
   });

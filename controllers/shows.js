@@ -29,8 +29,8 @@ const updateShow = async (req, reply) => {
 const deleteShow = async (req, reply) => {
   const { id } = req.params;
 
-  const deletedShow = await Show.findByIdAndDelete(id);
-  reply.send({ message: `${deletedShow.id} has been deleted` });
+  const deletedShow = await Show.findOneAndRemove(id);
+  reply.send({ message: `${deletedShow._id} has been deleted` });
 };
 
 module.exports = {
