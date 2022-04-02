@@ -1,6 +1,8 @@
 const { build } = require("./helper");
 const request = require("supertest");
 
+const root = { "root": true }
+
 describe("root tests", () => {
   let app;
 
@@ -15,5 +17,6 @@ describe("root tests", () => {
   test("default root route", async () => {
     const response = await request(app.server).get("/");
     expect(response.statusCode).toBe(200);
+    expect(response.body).toMatchObject(root);
   });
 });
