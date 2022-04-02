@@ -57,10 +57,7 @@ describe("Shows routes", () => {
       }),
     };
 
-    mockingoose(ShowModel).toReturn(
-      req.params.id == showInput._id ? showInput : undefined,
-      "findOne"
-    );
+    mockingoose(ShowModel).toReturn(showInput, "findOne");
 
     let response;
 
@@ -76,17 +73,6 @@ describe("Shows routes", () => {
 
   it("Get all shows", async () => {
     // Arrange
-    const showsInput = [
-      {
-        _id: "1234",
-        name: "Test Show Name",
-      },
-      {
-        _id: "5678",
-        name: "Test Show Name 2",
-      },
-    ];
-
     const req = {};
 
     const reply = {
@@ -95,7 +81,7 @@ describe("Shows routes", () => {
       }),
     };
 
-    mockingoose(ShowModel).toReturn(showsInput, "find");
+    mockingoose(ShowModel).toReturn(showsPayload, "find");
 
     let response;
 
