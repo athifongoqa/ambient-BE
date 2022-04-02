@@ -8,14 +8,18 @@ const {
   deleteShow,
 } = require("../../controllers/shows.js");
 
+const showInput = {
+  _id: "1234567890abcdef12345678",
+  creator_id: "12345678-90ab-cdef-1234-567890abcdef",
+  name: "Test Show Name",
+  description: "Test show description",
+  type: "test type",
+  date_scheduled: "2020-01-01T20:00:00.000Z",
+};
+
 describe("Shows routes", () => {
   it("Get single show", async () => {
     // Arrange
-    const showInput = {
-      _id: "1234",
-      name: "Test Show Name",
-    };
-
     const req = {
       params: {
         id: showInput._id,
@@ -79,13 +83,8 @@ describe("Shows routes", () => {
 
   it("Create a show", async () => {
     // Arrange
-    const showInput = {
-      name: "Test Show Name",
-      creator_id: "1234567890123456",
-    };
-
     const req = {
-      body: showInput,
+      body: ({ name, creator_id } = showInput),
     };
 
     const reply = {
@@ -115,12 +114,6 @@ describe("Shows routes", () => {
 
   it("Update a show", async () => {
     // Arrange
-    const showInput = {
-      _id: "1234",
-      name: "Test Show Name",
-      creator_id: "1234567890123456",
-    };
-
     const req = {
       params: {
         id: showInput._id,
@@ -152,17 +145,6 @@ describe("Shows routes", () => {
 
   it("Delete a show", async () => {
     // Arrange
-    const showInput = {
-      _id: "622d46cd755a74341a120491",
-      creator_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      name: "No name show 10",
-      description: "No description yet",
-      type: "live",
-      date_created: "2020-01-01T20:00:00.000+00:00",
-      date_scheduled: "2020-01-01T20:00:00.000+00:00",
-      date_ended: "2020-01-01T20:00:00.000+00:00",
-    };
-
     const req = {
       params: {
         id: showInput._id,
