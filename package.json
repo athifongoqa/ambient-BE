@@ -21,6 +21,8 @@
     "fastify-socket.io": "^3.0.0",
     "fastify-swagger": "^5.0.0",
     "fastify-warning": "^0.2.0",
+    "mongodb": "^4.4.1",
+    "mongodb-memory-server": "^8.4.2",
     "mongoose": "^6.2.5",
     "supertest": "^6.2.2",
     "validator": "^13.7.0"

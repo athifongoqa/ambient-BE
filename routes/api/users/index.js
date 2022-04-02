@@ -4,6 +4,7 @@ const userController = require("../../../controllers/users");
 const User = require("../../../models/user");
 const validator = require("validator");
 
+
 module.exports = async function (fastify, opts) {
   fastify.register(require("fastify-prettier"), {
     alwaysOn: true,
@@ -14,11 +15,7 @@ module.exports = async function (fastify, opts) {
     reply.send({ allUsers: users });
   });
 
-  fastify.get("/:username", async function (req, reply) {
-    const username = req.params.username;
-    let user = await User.findOne({ username: username });
-    reply.send({ requestedUser: user });
-  });
+  fastify.get("/:username", userController.getSingleUser);
 
   fastify.post("/", userController.addNewUser);
 

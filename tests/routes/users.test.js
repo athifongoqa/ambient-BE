@@ -1,49 +1,49 @@
-const mockingoose = require("mockingoose");
-const UserModel = require("../../models/user.js");
 const request = require("supertest");
-const build = require("./helper").build;
+const { build } = require("./helper");
+const db = require("../testdb")
+
+let app
+
+// Given Arrange (Can be optional)
+const userInput = {
+    username: 'athiF',
+    displayName: 'Athi F',
+    email: 'dummy123.dummy@code.berlin',
+    avatar: 'img.ip/464558.jpg',
+};
 
 const userPayLoad = {
     _id: expect.any(String),
-    username: 'athif',
+    username: 'athiF',
     displayName: 'Athi F',
-    email: 'dummy.dummy@code.berlin',
+    email: 'dummy123.dummy@code.berlin',
     avatar: 'img.ip/464558.jpg',
     followers: [],
     following: [],
 }
 
-// Given
-const userInput = {
-    username: 'athif',
-    displayName: 'Athi F',
-    email: 'dummy.dummy@code.berlin',
-    avatar: 'img.ip/464558.jpg',
-  };
+beforeAll(async () => {
+    app = await build();
+    await db.connect()
+  }, 15000);
 
+beforeEach(async () => await db.clearDatabase());
 
-describe("User routes", () => {
+afterAll(async () => {
+    await db.closeDatabase()
+});
 
-    let app;
+describe("E2E User endpoints", () => {
 
-    beforeAll(async () => {
-        app = await build();
-      }, 15000);
-    
-      afterAll(async () => {
-        await app.close();
-      });
-
-    it("Post a single user", async () => {
-      // When       
+    it("should POST a single user", async () => {
+      // When (Act - Only 1 operation)
       const { statusCode, body } = await request(app.server).post('/api/users/').send(userInput)
 
-      // Then
-      expect(statusCode).toBe(201)
+      // Then (Assert)
+      expect(statusCode).toBe(200)
       expect(body).toBeInstanceOf(Object);
-      expect(body.addedUser).toMatchObject(userPayLoad)
+      expect(body).toMatchObject(userPayLoad)
     
-    });
-
+    })
   });
   
