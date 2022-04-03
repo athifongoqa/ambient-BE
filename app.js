@@ -1,13 +1,15 @@
-'use strict'
-
-const path = require('path')
-const AutoLoad = require('fastify-autoload')
-const mongoose = require('mongoose')
+/* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
+const path = require('path');
+const AutoLoad = require('fastify-autoload');
+const mongoose = require('mongoose');
 
 module.exports = async function (fastify, opts) {
   // Place here your custom code!
-  await mongoose.connect(process.env.MONGODB)
-  fastify.after(err => err?console.log(err):console.log('MongoDB Plugin is ready.'))
+  await mongoose.connect(process.env.MONGODB);
+  fastify.after((err) => {
+    // eslint-disable-next-line no-console
+    err ? console.log(err) : console.log('MongoDB Plugin is ready.');
+  });
 
   // Do not touch the following lines
 
@@ -16,13 +18,13 @@ module.exports = async function (fastify, opts) {
   // through your application
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'plugins'),
-    options: Object.assign({}, opts)
-  })
+    options: { ...opts },
+  });
 
   // This loads all plugins defined in routes
   // define your routes in one of these
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'routes'),
-    options: Object.assign({}, opts)
-  })
-}
+    options: { ...opts },
+  });
+};
