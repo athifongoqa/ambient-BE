@@ -52,5 +52,23 @@ describe("E2E User endpoints", () => {
         expect(body).toMatchObject(userPayLoad)
     
     })
+
+    it('should GET all users', async () => {
+        // Given 
+        const dummy1 = createDummyUser('athiF', 'Athi F', 'dummy123.dummy@code.berlin', 'img.ip/464558.jpg')
+        const dummy2 = createDummyUser('athiFo', 'Athi Fo', 'dummy1234.dummy@code.berlin', 'img.ip/464559.jpg')
+        await users.addNewUser({body: dummy1})
+        await users.addNewUser({body: dummy2})
+
+        // When
+        const { body, statusCode } = await request(app.server).get('/api/users/')
+        
+        // Then
+        expect(statusCode).toBe(200)
+        expect(body).toBeInstanceOf(Object);
+        expect(body.allUsers).toBeInstanceOf(Object);
+        expect(body.allUsers[0]).toMatchObject(dummy1);
+        expect(body.allUsers[1]).toMatchObject(dummy2);
+     })
   });
   
