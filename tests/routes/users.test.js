@@ -96,5 +96,19 @@ describe("E2E User endpoints", () => {
         expect(statusCode).toBe(200)
         expect(body.message).toMatch(`${user._id} has been deleted`)
      })
+
+     it('should UPDATE a single user', async () => {
+        // Given
+        const dummy = createDummyUser('athiFongo', 'Athi F', 'dummy12345.dummy@code.berlin', 'img.ip/464558.jpg')
+        const user = await users.addNewUser({body: dummy})
+        const newDisplayName = 'Ronald'
+
+        // When
+        const { body, statusCode } = await request(app.server).patch(`/api/users/${user._id}`).send({displayName: newDisplayName})
+        
+        // Then
+        expect(statusCode).toBe(200)
+        expect(body.updatedUser.displayName).toMatch(newDisplayName)
+     })
   });
   
