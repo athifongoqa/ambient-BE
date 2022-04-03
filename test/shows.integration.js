@@ -1,3 +1,4 @@
+/* global before, after, it, describe */
 const request = require('supertest');
 const assert = require('assert');
 const { build } = require('../tests/routes/helper');
@@ -24,7 +25,7 @@ describe('shows integration tests', () => {
 
   it('Get a single show', async () => {
     const { statusCode, body } = await request(app.server).get(
-      '/api/shows/622d46cd755a74341a120491'
+      '/api/shows/622d46cd755a74341a120491',
     );
 
     assert.equal(statusCode, 200);
@@ -34,7 +35,7 @@ describe('shows integration tests', () => {
 
   it('Get a single show with non existing id', async () => {
     const { statusCode, body } = await request(app.server).get(
-      '/api/shows/622d46cd755a74341a120492'
+      '/api/shows/622d46cd755a74341a120492',
     );
 
     assert.equal(statusCode, 404);
@@ -43,7 +44,7 @@ describe('shows integration tests', () => {
 
   it('Get a single show with invalid length id', async () => {
     const { statusCode, body } = await request(app.server).get(
-      '/api/shows/123'
+      '/api/shows/123',
     );
 
     assert.equal(statusCode, 500);
