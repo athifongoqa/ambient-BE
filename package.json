@@ -33,6 +33,7 @@
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
     "mockingoose": "^2.15.2",
+    "socket.io-client": "^4.4.1",
     "tap": "^15.1.6"
   },
   "scripts": {
