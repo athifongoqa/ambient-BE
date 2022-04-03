@@ -27,5 +27,13 @@ async function getSingleUser(req, reply) {
        throw boom.boomify(err)
     }
  }
+
+ async function updateSingleUser (req, reply) {
+    const id = req.params.id;
+    let updatedUser = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    reply.send({ updatedUser: updatedUser });
+  }
  
-module.exports = {addNewUser, getSingleUser}
+module.exports = {addNewUser, getSingleUser, updateSingleUser}
