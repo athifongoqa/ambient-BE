@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const ShowSchema = new mongoose.Schema({
   creator_id: {
@@ -8,16 +8,16 @@ const ShowSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    default: "Show Name",
+    default: 'Show Name',
   },
   description: {
     type: String,
     required: true,
-    default: "No description",
+    default: 'No description',
   },
   type: {
     type: String,
-    default: "",
+    default: '',
   },
   date_created: {
     type: Date,
@@ -34,4 +34,4 @@ const ShowSchema = new mongoose.Schema({
   participants_id: [{ type: String }],
 });
 
-module.exports = mongoose.models.Show || mongoose.model("Show", ShowSchema);
+module.exports = mongoose.models.Show || mongoose.model('Show', ShowSchema);

@@ -1,4 +1,4 @@
-const Show = require("../models/show.model");
+const Show = require('../models/show.model');
 
 const getShows = async (req, reply) => {
   const shows = await Show.find();
@@ -7,7 +7,7 @@ const getShows = async (req, reply) => {
 
 const getShow = async function (req, reply) {
   const { id } = req.params;
-  let show = await Show.findOne({ _id: id });
+  const show = await Show.findOne({ _id: id });
   reply.send(show);
 };
 

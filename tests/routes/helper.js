@@ -22,7 +22,7 @@ async function build() {
   // are exposed for testing purposes, this is
   // different from the production setup
   const app = await buildApplication(argv, config());
-
+  
   // tear down our app after we are done
 
   return app;

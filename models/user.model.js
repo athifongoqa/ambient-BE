@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -8,25 +8,25 @@ const UserSchema = new mongoose.Schema({
   },
   displayName: {
     type: String,
-    default: ''
+    default: '',
   },
   email: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   avatar: {
     type: String,
-    default: ''
+    default: '',
   },
   following: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'following'
- }],
+    ref: 'following',
+  }],
   followers: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'followers'
- }],
-})
+    ref: 'followers',
+  }],
+});
 
-module.exports = mongoose.models.User || mongoose.model('User', UserSchema)
+module.exports = mongoose.models.User || mongoose.model('User', UserSchema);

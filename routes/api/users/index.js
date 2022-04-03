@@ -1,46 +1,20 @@
-"use strict";
-
-const User = require("../../../models/user");
-const validator = require("validator");
+const userController = require('../../../controllers/users');
+const {
+  getUsersOpts, getUserOpts, postUserOpts, deleteUserOpts, updateUserOpts,
+} = require('./schema');
 
 module.exports = async function (fastify, opts) {
-  fastify.register(require("fastify-prettier"), {
+  fastify.register(require('fastify-prettier'), {
     alwaysOn: true,
   });
 
-  fastify.get("/", async function (req, reply) {
-    const users = await User.find();
-    reply.send({ allUsers: users });
-  });
+  fastify.get('/', getUsersOpts.schema, userController.getAllUsers);
 
-  fastify.get("/:username", async function (req, reply) {
-    const username = req.params.username;
-    let user = await User.findOne({ username: username });
-    reply.send({ requestedUser: user });
-  });
+  fastify.get('/:username', getUserOpts.schema, userController.getSingleUser);
 
-  fastify.post("/", async (req, reply) => {
-    if (!validator.isEmail(req.body.email)) {
-      reply.send({ message: "Please use a valid email address." });
-      return;
-    }
+  fastify.post('/', postUserOpts.schema, userController.addNewUser);
 
-    let user = new User(req.body);
-    let returnedUser = await user.save();
-    reply.code(201).send({ addedUser: returnedUser });
-  });
+  fastify.patch('/:id', updateUserOpts.schema, userController.updateSingleUser);
 
-  fastify.patch("/:id", async function (req, reply) {
-    const id = req.params.id;
-    let updatedUser = await User.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    reply.send({ updatedUser: updatedUser });
-  });
-
-  fastify.delete("/:id", async function (req, reply) {
-    const id = req.params.id;
-    let deletedUser = await User.findByIdAndDelete(id);
-    reply.send({ message: `${deletedUser.id} has been deleted` });
-  });
+  fastify.delete('/:id', deleteUserOpts.schema, userController.deleteSingleUser);
 };
