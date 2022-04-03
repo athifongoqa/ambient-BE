@@ -17,6 +17,11 @@ async function addNewUser(req, reply) {
     }
  }
 
+async function getAllUsers (req, reply) {
+    const users = await User.find();
+    reply.send({ allUsers: users });
+  }
+
 async function getSingleUser(req, reply) {
     try {
     const username = req.params.username;
@@ -42,4 +47,4 @@ async function deleteSingleUser (req, reply) {
     reply.send({ message: `${deletedUser.id} has been deleted` });
   }
  
-module.exports = {addNewUser, getSingleUser, updateSingleUser, deleteSingleUser}
+module.exports = {addNewUser, getSingleUser, updateSingleUser, deleteSingleUser, getAllUsers}
