@@ -83,5 +83,18 @@ describe("E2E User endpoints", () => {
         expect(statusCode).toBe(200)
         expect(body.username).toBe(user.username)
      })
+
+     it('should DELETE a single user', async () => {
+        // Given
+        const dummy = createDummyUser('athiFongo', 'Athi F', 'dummy12345.dummy@code.berlin', 'img.ip/464558.jpg')
+        const user = await users.addNewUser({body: dummy})
+
+        // When
+        const { body, statusCode } = await request(app.server).delete(`/api/users/${user._id}`)
+        
+        // Then
+        expect(statusCode).toBe(200)
+        expect(body.message).toMatch(`${user._id} has been deleted`)
+     })
   });
   
