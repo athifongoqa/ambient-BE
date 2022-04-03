@@ -21,9 +21,5 @@ module.exports = async function (fastify, opts) {
 
   fastify.patch("/:id", userController.updateSingleUser);
 
-  fastify.delete("/:id", async function (req, reply) {
-    const id = req.params.id;
-    let deletedUser = await User.findByIdAndDelete(id);
-    reply.send({ message: `${deletedUser.id} has been deleted` });
-  });
+  fastify.delete("/:id", userController.deleteSingleUser);
 };

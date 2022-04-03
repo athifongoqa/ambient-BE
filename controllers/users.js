@@ -35,5 +35,11 @@ async function getSingleUser(req, reply) {
     });
     reply.send({ updatedUser: updatedUser });
   }
+
+async function deleteSingleUser (req, reply) {
+    const id = req.params.id;
+    let deletedUser = await User.findByIdAndDelete(id);
+    reply.send({ message: `${deletedUser.id} has been deleted` });
+  }
  
-module.exports = {addNewUser, getSingleUser, updateSingleUser}
+module.exports = {addNewUser, getSingleUser, updateSingleUser, deleteSingleUser}
