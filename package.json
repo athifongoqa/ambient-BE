@@ -32,13 +32,17 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
+    "mocha": "^9.2.2",
     "mockingoose": "^2.15.2",
+    "supertest": "^6.2.2",
     "tap": "^15.1.6"
   },
   "scripts": {
     "start": "fastify start -l info app.js",
     "dev": "fastify start -w -l info -P app.js",
-    "test": "jest"
+    "test": "jest && mocha --timeout 15000 --exit",
+    "jest": "jest",
+    "mocha": "mocha --timeout 15000 --exit"
   },
   "repository": {
     "type": "git",
