@@ -1,47 +1,44 @@
-'use strict';
-
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
-let mongod = undefined;
-
+let mongod;
 
 /**
  * Connect to the in-memory database.
  */
 module.exports.connect = async () => {
-    await mongoose.disconnect();
-    mongod = await MongoMemoryServer.create();
-    const uri = mongod.getUri();
+  await mongoose.disconnect();
+  mongod = await MongoMemoryServer.create();
+  const uri = mongod.getUri();
 
-    const mongooseOpts = {
-        useNewUrlParser: true,
-    };
+  const mongooseOpts = {
+    useNewUrlParser: true,
+  };
 
-    await mongoose.connect(uri, mongooseOpts);
+  await mongoose.connect(uri, mongooseOpts);
 };
 
 /**
  * Drop database, close the connection and stop mongod.
  */
 module.exports.closeDatabase = async () => {
-    if (mongod) {
-        await mongoose.connection.dropDatabase();
-        await mongoose.connection.close();
-        await mongod.stop();
-    }
+  if (mongod) {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    await mongod.stop();
+  }
 };
 
 /**
  * Remove all the data for all db collections.
  */
 module.exports.clearDatabase = async () => {
-    if (mongod) {
-        const collections = mongoose.connection.collections;
+  if (mongod) {
+    const { collections } = mongoose.connection;
 
-        for (const key in collections) {
-            const collection = collections[key];
-            await collection.deleteMany();
-        }
+    for (const key in collections) {
+      const collection = collections[key];
+      await collection.deleteMany();
     }
+  }
 };
