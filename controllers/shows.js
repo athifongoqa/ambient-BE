@@ -7,8 +7,15 @@ const getShows = async (req, reply) => {
 
 const getShow = async function (req, reply) {
   const { id } = req.params;
-  const show = await Show.findOne({ _id: id });
-  reply.send(show);
+  const show = await Show.findById(id);
+
+  try {
+    show
+      ? reply.send(show)
+      : reply.status(404).send({ message: 'Show not found' });
+  } catch (error) {
+    reply.status(500).send({ message: error.message });
+  }
 };
 
 const createShow = async (req, reply) => {
