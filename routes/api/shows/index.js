@@ -1,3 +1,5 @@
+const fastifyPrettier = require('fastify-prettier');
+
 const {
   getShow,
   getShows,
@@ -121,8 +123,8 @@ const updateShowOpts = {
   handler: updateShow,
 };
 
-module.exports = async function (fastify, opts) {
-  fastify.register(require('fastify-prettier'), {
+module.exports = async function (fastify) {
+  fastify.register(fastifyPrettier, {
     alwaysOn: true,
   });
   // Get all shows

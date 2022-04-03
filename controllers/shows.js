@@ -10,6 +10,7 @@ const getShow = async function (req, reply) {
   const show = await Show.findById(id);
 
   try {
+    // eslint-disable-next-line no-unused-expressions
     show
       ? reply.send(show)
       : reply.status(404).send({ message: 'Show not found' });
@@ -37,6 +38,7 @@ const deleteShow = async (req, reply) => {
   const { id } = req.params;
 
   const deletedShow = await Show.findOneAndRemove(id);
+  // eslint-disable-next-line no-underscore-dangle
   reply.send({ message: `${deletedShow._id} has been deleted` });
 };
 
