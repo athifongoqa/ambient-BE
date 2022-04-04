@@ -18,7 +18,7 @@ async function addNewUser(req, reply) {
 
 async function getAllUsers(req, reply) {
   const users = await User.find();
-  reply.send({ allUsers: users });
+  return users;
 }
 
 async function getSingleUser(req, reply) {
@@ -36,13 +36,13 @@ async function updateSingleUser(req, reply) {
   const updatedUser = await User.findByIdAndUpdate(id, req.body, {
     new: true,
   });
-  reply.send({ updatedUser });
+  return { message: `${updatedUser.id} has been updated` };
 }
 
 async function deleteSingleUser(req, reply) {
   const { id } = req.params;
   const deletedUser = await User.findByIdAndDelete(id);
-  reply.send({ message: `${deletedUser.id} has been deleted` });
+  return { message: `${deletedUser.id} has been deleted` };
 }
 
 module.exports = {

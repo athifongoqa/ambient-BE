@@ -64,9 +64,8 @@ describe('E2E User endpoints', () => {
     // Then
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
-    expect(body.allUsers).toBeInstanceOf(Object);
-    expect(body.allUsers[0]).toMatchObject(dummy1);
-    expect(body.allUsers[1]).toMatchObject(dummy2);
+    expect(body[0]).toMatchObject(dummy1);
+    expect(body[1]).toMatchObject(dummy2);
   });
 
   it('should GET a single user', async () => {
@@ -106,6 +105,6 @@ describe('E2E User endpoints', () => {
 
     // Then
     expect(statusCode).toBe(200);
-    expect(body.updatedUser.displayName).toMatch(newDisplayName);
+    expect(body.message).toMatch(`${user._id} has been updated`);
   });
 });
