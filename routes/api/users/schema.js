@@ -1,13 +1,30 @@
+const userController = require('../../../controllers/users')
+
+const User = {
+  type: 'object',
+  properties: {
+    _id: { type: 'string' },
+    username: { type: 'string' },
+    displayName: { type: 'string' },
+    email: { type: 'string' },
+    avatar: { type: 'string' },
+    following: { type: 'array', items: { type: 'object', format: 'uuid'} },
+    followers: { type: 'array', items: { type: 'object', format: 'uuid'} },
+  },
+};
+
 const getUsersOpts = {
   schema: {
     tags: ['user'],
     response: {
       200: {
-        type: 'object',
         description: 'Get all users',
+        type: 'array',
+        items: User,
       },
     },
   },
+  handler: userController.getAllUsers,
 };
 
 const getUserOpts = {
@@ -21,11 +38,12 @@ const getUserOpts = {
     tags: ['user'],
     response: {
       200: {
-        type: 'object',
+        ...User,
         description: 'Get a single user',
       },
     },
   },
+  handler: userController.getSingleUser,
 };
 
 const postUserOpts = {
@@ -34,16 +52,20 @@ const postUserOpts = {
     body: {
       required: [
         'username',
+        'displayName',
         'email',
+        'avatar',
       ],
+      ...User,
     },
     response: {
       200: {
-        type: 'object',
-        description: 'Create a new user',
+        ...User,
+        description: 'Created a new user',
       },
     },
   },
+  handler: userController.addNewUser
 };
 
 const deleteUserOpts = {
@@ -58,12 +80,14 @@ const deleteUserOpts = {
     response: {
       200: {
         type: 'object',
+        description: 'Deleted user',
         properties: {
           message: { type: 'string' },
         },
       },
     },
   },
+  handler: userController.deleteSingleUser
 };
 
 const updateUserOpts = {
@@ -79,9 +103,13 @@ const updateUserOpts = {
       200: {
         type: 'object',
         description: 'Updated user',
+        properties: {
+          message: { type: 'string' },
+        },
       },
     },
   },
+  handler: userController.updateSingleUser
 };
 
 module.exports = {

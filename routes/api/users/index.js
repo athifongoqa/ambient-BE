@@ -1,4 +1,3 @@
-const userController = require('../../../controllers/users');
 const {
   getUsersOpts, getUserOpts, postUserOpts, deleteUserOpts, updateUserOpts,
 } = require('./schema');
@@ -8,13 +7,13 @@ module.exports = async function (fastify, opts) {
     alwaysOn: true,
   });
 
-  fastify.get('/', getUsersOpts.schema, userController.getAllUsers);
+  fastify.get('/', getUsersOpts);
 
-  fastify.get('/:username', getUserOpts.schema, userController.getSingleUser);
+  fastify.get('/:username', getUserOpts);
 
-  fastify.post('/', postUserOpts.schema, userController.addNewUser);
+  fastify.post('/', postUserOpts);
 
-  fastify.patch('/:id', updateUserOpts.schema, userController.updateSingleUser);
+  fastify.patch('/:id', updateUserOpts);
 
-  fastify.delete('/:id', deleteUserOpts.schema, userController.deleteSingleUser);
+  fastify.delete('/:id', deleteUserOpts);
 };
