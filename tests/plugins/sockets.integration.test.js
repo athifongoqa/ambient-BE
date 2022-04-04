@@ -1,81 +1,37 @@
 const io = require('socket.io-client');
-const http = require('http');
-const ioBack = require('socket.io');
-const { build } = require('../routes/helper');
 
 let socket;
-let app;
-let httpServerAddr;
-let ioServer;
 
-/**
- * Setup WS & HTTP servers
- */
-beforeAll(async (done) => {
-  app = await build.listen();
-  httpServerAddr = app.address();
-  ioServer = ioBack(app);
-  done();
-});
-
-/**
- *  Cleanup WS & HTTP servers
- */
-afterAll((done) => {
-  ioServer.close();
-  app.close();
-  done();
-});
-
-/**
- * Run before each test
- */
 beforeEach((done) => {
   // Setup
-  // Do not hardcode server port and address, square brackets are used for IPv6
-  socket = io.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
+  socket = io.connect('http://localhost:3000', {
     'reconnection delay': 0,
     'reopen delay': 0,
     'force new connection': true,
-    transports: ['websocket'],
   });
   socket.on('connect', () => {
+    console.log('worked...');
     done();
   });
-});
+  socket.on('disconnect', () => {
+    console.log('disconnected...');
+  });
+}, 15000);
 
-/**
- * Run after each test
- */
 afterEach((done) => {
   // Cleanup
   if (socket.connected) {
+    console.log('disconnecting...');
     socket.disconnect();
+  } else {
+    // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
+    console.log('no connection to break...');
   }
   done();
 });
 
-
-describe('basic socket.io example', () => {
-  test('should communicate', (done) => {
-    // once connected, emit Hello World
-    ioServer.emit('echo', 'Hello World');
-    socket.once('echo', (message) => {
-      // Check that the message matches
-      expect(message).toBe('Hello World');
-      done();
-    });
-    ioServer.on('connection', (mySocket) => {
-      expect(mySocket).toBeDefined();
+describe('E2E Socket events', () => {
+    it('Silly', async () => {
+      expect(1).toEqual(1);
     });
   });
-  test('should communicate with waiting for socket.io handshakes', (done) => {
-    // Emit sth from Client do Server
-    socket.emit('examlpe', 'some messages');
-    // Use timeout to wait for socket.io server handshakes
-    setTimeout(() => {
-      // Put your server side expect() here
-      done();
-    }, 50);
-  });
-});
