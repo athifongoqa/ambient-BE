@@ -1,6 +1,6 @@
 const {
   getUsersOpts, getUserOpts, postUserOpts, deleteUserOpts, updateUserOpts,
-} = require('./schema');
+} = require('./user.options');
 
 module.exports = async function (fastify, opts) {
   fastify.register(require('fastify-prettier'), {
