@@ -1,4 +1,5 @@
-const fp = require('fastify-plugin')
+const fp = require('fastify-plugin');
+const { io } = require('socket.io-client');
 
 module.exports = fp(async function (fastify, opts) {
   fastify.register(require('fastify-socket.io'))

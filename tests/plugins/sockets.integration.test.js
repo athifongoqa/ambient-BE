@@ -1,9 +1,18 @@
 const io = require('socket.io-client');
+const ioBack = require('socket.io');
+const { build } = require('../routes/helper')
 
 let socket;
+let ioServer;
+
+beforeAll( async (done) => {
+  let app;
+  app = await build();
+  ioServer = ioBack(app);
+  done();
+}, 15000);
 
 beforeEach((done) => {
-  // Setup
   socket = io.connect('http://localhost:3000', {
     'reconnection delay': 0,
     'reopen delay': 0,
@@ -19,19 +28,32 @@ beforeEach((done) => {
 }, 15000);
 
 afterEach((done) => {
-  // Cleanup
   if (socket.connected) {
-    console.log('disconnecting...');
     socket.disconnect();
-  } else {
-    // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
-    console.log('no connection to break...');
   }
   done();
 });
 
-describe('E2E Socket events', () => {
-    it('Silly', async () => {
-      expect(1).toEqual(1);
+describe('basic socket.io example', () => {
+  test('should communicate', (done) => {
+    // once connected, emit Hello World
+    ioServer.emit('echo', 'Hello World');
+    socket.once('echo', (message) => {
+      // Check that the message matches
+      expect(message).toBe('Hello World');
+      done();
+    });
+    ioServer.on('connection', (mySocket) => {
+      expect(mySocket).toBeDefined();
     });
   });
+  test('should communicate with waiting for socket.io handshakes', (done) => {
+    // Emit sth from Client do Server
+    socket.emit('examlpe', 'some messages');
+    // Use timeout to wait for socket.io server handshakes
+    setTimeout(() => {
+      // Put your server side expect() here
+      done();
+    }, 50);
+  });
+});
