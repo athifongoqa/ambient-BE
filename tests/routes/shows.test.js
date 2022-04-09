@@ -231,10 +231,7 @@ describe('Shows routes', () => {
     await deleteShow(req, reply);
 
     // Assert
-    expect(response).toHaveProperty(
-      'message',
-      `${req.params.id} has been deleted`,
-    );
+    expect(response).toHaveProperty('message', 'Show deleted');
     expect(response).toBeInstanceOf(Object);
     expect(reply.send).toBeCalledTimes(1);
   });
