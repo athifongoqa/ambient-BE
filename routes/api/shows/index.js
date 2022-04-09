@@ -127,6 +127,11 @@ module.exports = async function (fastify) {
   fastify.register(fastifyPrettier, {
     alwaysOn: true,
   });
+
+  fastify.setErrorHandler(function (error, request, reply) {
+    reply.code(500).send({ message: 'The server returned an error' });
+  });
+
   // Get all shows
   fastify.get('/', getShowsOpts);
 
