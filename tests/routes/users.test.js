@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { build } = require('./helper');
+const { build } = require('../helper');
 const db = require('../testdb');
 const users = require('../../controllers/users');
 
@@ -40,10 +40,17 @@ afterAll(async () => {
 describe('E2E User endpoints', () => {
   it('should POST a single user', async () => {
     // Given
-    const dummy = createDummyUser('athiF', 'Athi F', 'dummy123.dummy@code.berlin', 'img.ip/464558.jpg');
+    const dummy = createDummyUser(
+      'athiF',
+      'Athi F',
+      'dummy123.dummy@code.berlin',
+      'img.ip/464558.jpg',
+    );
 
     // When (Only 1 operation)
-    const { statusCode, body } = await request(app.server).post('/api/users/').send(dummy);
+    const { statusCode, body } = await request(app.server)
+      .post('/api/users/')
+      .send(dummy);
 
     // Then
     expect(statusCode).toBe(200);
@@ -53,8 +60,18 @@ describe('E2E User endpoints', () => {
 
   it('should GET all users', async () => {
     // Given
-    const dummy1 = createDummyUser('athiF', 'Athi F', 'dummy123.dummy@code.berlin', 'img.ip/464558.jpg');
-    const dummy2 = createDummyUser('athiFo', 'Athi Fo', 'dummy1234.dummy@code.berlin', 'img.ip/464559.jpg');
+    const dummy1 = createDummyUser(
+      'athiF',
+      'Athi F',
+      'dummy123.dummy@code.berlin',
+      'img.ip/464558.jpg',
+    );
+    const dummy2 = createDummyUser(
+      'athiFo',
+      'Athi Fo',
+      'dummy1234.dummy@code.berlin',
+      'img.ip/464559.jpg',
+    );
     await users.addNewUser({ body: dummy1 });
     await users.addNewUser({ body: dummy2 });
 
@@ -71,11 +88,18 @@ describe('E2E User endpoints', () => {
 
   it('should GET a single user', async () => {
     // Given
-    const dummy = createDummyUser('athiFongo', 'Athi F', 'dummy12345.dummy@code.berlin', 'img.ip/464558.jpg');
+    const dummy = createDummyUser(
+      'athiFongo',
+      'Athi F',
+      'dummy12345.dummy@code.berlin',
+      'img.ip/464558.jpg',
+    );
     const user = await users.addNewUser({ body: dummy });
 
     // When
-    const { body, statusCode } = await request(app.server).get('/api/users/athiFongo');
+    const { body, statusCode } = await request(app.server).get(
+      '/api/users/athiFongo',
+    );
 
     // Then
     expect(statusCode).toBe(200);
@@ -84,11 +108,18 @@ describe('E2E User endpoints', () => {
 
   it('should DELETE a single user', async () => {
     // Given
-    const dummy = createDummyUser('athiFongo', 'Athi F', 'dummy12345.dummy@code.berlin', 'img.ip/464558.jpg');
+    const dummy = createDummyUser(
+      'athiFongo',
+      'Athi F',
+      'dummy12345.dummy@code.berlin',
+      'img.ip/464558.jpg',
+    );
     const user = await users.addNewUser({ body: dummy });
 
     // When
-    const { body, statusCode } = await request(app.server).delete(`/api/users/${user._id}`);
+    const { body, statusCode } = await request(app.server).delete(
+      `/api/users/${user._id}`,
+    );
 
     // Then
     expect(statusCode).toBe(200);
@@ -97,12 +128,19 @@ describe('E2E User endpoints', () => {
 
   it('should UPDATE a single user', async () => {
     // Given
-    const dummy = createDummyUser('athiFongo', 'Athi F', 'dummy12345.dummy@code.berlin', 'img.ip/464558.jpg');
+    const dummy = createDummyUser(
+      'athiFongo',
+      'Athi F',
+      'dummy12345.dummy@code.berlin',
+      'img.ip/464558.jpg',
+    );
     const user = await users.addNewUser({ body: dummy });
     const newDisplayName = 'Ronald';
 
     // When
-    const { body, statusCode } = await request(app.server).patch(`/api/users/${user._id}`).send({ displayName: newDisplayName });
+    const { body, statusCode } = await request(app.server)
+      .patch(`/api/users/${user._id}`)
+      .send({ displayName: newDisplayName });
 
     // Then
     expect(statusCode).toBe(200);

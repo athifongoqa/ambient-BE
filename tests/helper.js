@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 // This file contains code that we reuse
 // between our tests.
 
-const { build: buildApplication } = require("fastify-cli/helper");
-const path = require("path");
-const AppPath = path.join(__dirname, "../..", "app.js");
+const { build: buildApplication } = require('fastify-cli/helper');
+const path = require('path');
+const AppPath = path.join(__dirname, '../', 'app.js');
 
 // Fill in this config with all the configurations
 // needed for testing the application
@@ -22,7 +22,7 @@ async function build() {
   // are exposed for testing purposes, this is
   // different from the production setup
   const app = await buildApplication(argv, config());
-  
+
   // tear down our app after we are done
 
   return app;

@@ -1,10 +1,9 @@
-/* global before, after, it, describe */
 const request = require('supertest');
 const assert = require('assert');
-const db = require('../tests/testdb');
-const Show = require('../models/show.model');
-const { build } = require('../tests/routes/helper');
-const { showInput, showsPayload } = require('../tests/dummyShows');
+const db = require('../testdb');
+const Show = require('../../models/show.model');
+const { build } = require('../helper');
+const { showInput, showsPayload } = require('../dummyShows');
 
 describe('shows integration tests', () => {
   let app;
@@ -115,5 +114,17 @@ describe('shows integration tests', () => {
 
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
+  });
+
+  it('Delete a show', async () => {
+    const show = new Show(showInput);
+    const returnedShow = await show.save();
+
+    const { statusCode, body } = await request(app.server)
+      .delete(`/api/shows/${returnedShow._id}`)
+      .send();
+
+    assert.equal(statusCode, 200);
+    assert.equal(body.message, 'Show deleted');
   });
 });

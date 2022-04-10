@@ -40,9 +40,9 @@
   "scripts": {
     "start": "fastify start -l info app.js",
     "dev": "fastify start -w -l info -P app.js",
-    "test": "jest && mocha --timeout 15000 --exit",
+    "test": "jest && mocha --recursive './tests/routes/*.integration.js' --timeout 15000 --exit",
     "jest": "jest",
-    "mocha": "mocha --timeout 15000 --exit"
+    "mocha": "mocha --recursive './tests/routes/*.integration.js' --timeout 15000 --exit"
   },
   "repository": {
     "type": "git",
