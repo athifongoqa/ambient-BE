@@ -6,7 +6,7 @@ const {
   updateShow,
 } = require('../../../controllers/shows');
 
-const Show = {
+const returnedShow = {
   type: 'object',
   properties: {
     _id: { type: 'string' },
@@ -24,6 +24,17 @@ const Show = {
   },
 };
 
+const show = {
+  type: 'object',
+  properties: {
+    creator_id: { type: 'string', format: 'uuid' },
+    name: { type: 'string', example: 'New Show Name' },
+    description: { type: 'string', example: 'New Show Description' },
+    date_created: { type: 'string', format: 'date-time' },
+    date_scheduled: { type: 'string', format: 'date-time' },
+  },
+};
+
 const getShowsOpts = {
   schema: {
     tags: ['show'],
@@ -31,7 +42,14 @@ const getShowsOpts = {
       200: {
         description: 'Get all shows',
         type: 'array',
-        items: Show,
+        items: returnedShow,
+      },
+      404: {
+        description: 'No shows found',
+        type: 'object',
+        properties: {
+          message: { type: 'string', example: 'There are no shows' },
+        },
       },
     },
   },
@@ -43,14 +61,21 @@ const getShowOpts = {
     params: {
       id: {
         type: 'string',
-        description: 'Numeric value of show to get',
+        description: 'Id of show to get',
       },
     },
     tags: ['show'],
     response: {
       200: {
-        ...Show,
+        ...returnedShow,
         description: 'Get a single show',
+      },
+      404: {
+        description: 'No show found',
+        type: 'object',
+        properties: {
+          message: { type: 'string', example: 'Show not found' },
+        },
       },
     },
   },
@@ -68,11 +93,11 @@ const postShowOpts = {
         'date_created',
         'date_scheduled',
       ],
-      ...Show,
+      ...show,
     },
     response: {
       201: {
-        ...Show,
+        ...returnedShow,
         description: 'Create a new show',
       },
     },
@@ -85,15 +110,23 @@ const deleteShowOpts = {
     params: {
       id: {
         type: 'string',
-        description: 'Numeric value of show to delete',
+        description: 'Id of show to delete',
       },
     },
     tags: ['show'],
     response: {
       200: {
+        description: 'Delete show',
         type: 'object',
         properties: {
-          message: { type: 'string' },
+          message: { type: 'string', example: 'Show deleted' },
+        },
+      },
+      404: {
+        description: 'No show found',
+        type: 'object',
+        properties: {
+          message: { type: 'string', example: 'Show not found' },
         },
       },
     },
@@ -106,15 +139,28 @@ const updateShowOpts = {
     params: {
       id: {
         type: 'string',
-        description: 'Numeric value of show to update',
+        description: 'Id of show to update',
       },
     },
-    body: Show,
+    body: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', example: 'Update Show Name' },
+        type: { type: 'string', example: 'Live Show' },
+      },
+    },
     tags: ['show'],
     response: {
       200: {
-        ...Show,
+        ...returnedShow,
         description: 'Updated show',
+      },
+      404: {
+        description: 'No show found',
+        type: 'object',
+        properties: {
+          message: { type: 'string', example: 'Show not found' },
+        },
       },
     },
   },
