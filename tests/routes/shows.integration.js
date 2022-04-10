@@ -87,7 +87,7 @@ describe('shows integration tests', () => {
     const returnedShow = await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .put(`/api/shows/${returnedShow._id}`)
+      .patch(`/api/shows/${returnedShow._id}`)
       .send({ name: 'Updated Show Name' });
 
     assert.equal(statusCode, 200);
@@ -100,7 +100,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .put(`/api/shows/1234567890abcdef12345678`)
+      .patch(`/api/shows/1234567890abcdef12345678`)
       .send({ name: 'Updated Show Name' });
 
     assert.equal(statusCode, 404);
@@ -109,7 +109,7 @@ describe('shows integration tests', () => {
 
   it('Update a show with invalid length id', async () => {
     const { statusCode, body } = await request(app.server)
-      .put('/api/shows/123')
+      .patch('/api/shows/123')
       .send({ name: 'Updated Show Name' });
 
     assert.equal(statusCode, 500);

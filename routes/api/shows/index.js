@@ -24,5 +24,5 @@ module.exports = async function (fastify) {
 
   fastify.delete('/:id', deleteShowOpts);
 
-  fastify.put('/:id', updateShowOpts);
+  fastify.patch('/:id', updateShowOpts);
 };
