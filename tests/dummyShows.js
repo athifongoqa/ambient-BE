@@ -1,5 +1,4 @@
 const showInput = {
-  _id: expect.any(String),
   creator_id: '12345678-90ab-cdef-1234-567890abcdef',
   name: 'Test Show Name',
   description: 'Test show description',
@@ -9,7 +8,6 @@ const showInput = {
 
 const showsPayload = [
   {
-    _id: expect.any(String),
     creator_id: '12345678-90ab-cdef-1234-567890abcdef',
     name: 'Test Show Name',
     description: 'Test show description',
@@ -20,7 +18,6 @@ const showsPayload = [
     participants_id: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
   },
   {
-    _id: expect.any(String),
     creator_id: 'fedcba98-7654-3210-fedc-ba9876543210',
     name: 'Test Show Name 2',
     description: 'Test show description 2',

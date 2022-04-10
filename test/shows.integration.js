@@ -2,7 +2,9 @@
 const request = require('supertest');
 const assert = require('assert');
 const db = require('../tests/testdb');
+const Show = require('../models/show.model');
 const { build } = require('../tests/routes/helper');
+const { showInput, showsPayload } = require('../tests/dummyShows');
 
 describe('shows integration tests', () => {
   let app;
@@ -26,6 +28,17 @@ describe('shows integration tests', () => {
 
     assert.equal(statusCode, 404);
     assert.equal(body.message, 'There are no shows');
+  });
+
+  it('Get all shows when there are some', async () => {
+    const show = new Show(showInput);
+    await show.save();
+
+    const { statusCode, body } = await request(app.server).get('/api/shows/');
+
+    assert.equal(statusCode, 200);
+    assert.equal(body.length, 1);
+    assert.equal(body[0].name, showInput.name);
   });
 
   // it('Get a single show', async () => {
