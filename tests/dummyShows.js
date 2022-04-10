@@ -8,6 +8,7 @@ const showInput = {
 
 const showsPayload = [
   {
+    _id: '1234567890abcdef01234567',
     creator_id: '12345678-90ab-cdef-1234-567890abcdef',
     name: 'Test Show Name',
     description: 'Test show description',
@@ -18,6 +19,7 @@ const showsPayload = [
     participants_id: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
   },
   {
+    _id: 'fedcba0987654321fedcba09',
     creator_id: 'fedcba98-7654-3210-fedc-ba9876543210',
     name: 'Test Show Name 2',
     description: 'Test show description 2',

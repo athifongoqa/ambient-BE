@@ -125,6 +125,6 @@ describe('shows integration tests', () => {
       .send();
 
     assert.equal(statusCode, 200);
-    assert.equal(body.message, 'Show deleted');
+    assert.equal(body.message, `Show id ${returnedShow._id} deleted`);
   });
 });

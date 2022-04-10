@@ -20,55 +20,13 @@ module.exports = fp(async (fastify) => {
       consumes: ['application/json'],
       produces: ['application/json'],
       tags: [
-        { name: 'user', description: 'User related end-points' },
         { name: 'show', description: 'Show related end-points' },
-        { name: 'playlist', description: 'Playlist related end-points' },
+        { name: 'user', description: 'User related end-points' },
       ],
-      definitions: {
-        User: {
-          type: 'object',
-          required: ['id', 'email', 'username'],
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-            username: { type: 'string' },
-            profile_pic: { type: 'string', format: 'hostname' },
-            email: { type: 'string', format: 'email' },
-            display_name: { type: 'string' },
-            accounts: {
-              type: 'object',
-              properties: {
-                spotify_url: { type: 'string', format: 'uri' },
-                twitter_url: { type: 'string', format: 'uri' },
-                tiktok_url: { type: 'string', format: 'uri' },
-                linktree_url: { type: 'string', format: 'uri' },
-                instagram_url: { type: 'string', format: 'uri' },
-              },
-            },
-          },
-        },
-      },
-      securityDefinitions: {
-        apiKey: {
-          type: 'apiKey',
-          name: 'apiKey',
-          in: 'header',
-        },
-      },
     },
     uiConfig: {
-      // docExpansion: "full",
       deepLinking: false,
     },
-    uiHooks: {
-      onRequest: (request, reply, next) => {
-        next();
-      },
-      preHandler: (request, reply, next) => {
-        next();
-      },
-    },
-    staticCSP: true,
-    transformStaticCSP: (header) => header,
     exposeRoute: true,
   });
 });

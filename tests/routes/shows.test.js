@@ -66,7 +66,7 @@ describe('Shows routes', () => {
       send: jest.fn().mockImplementation((res) => {
         response = res;
       }),
-      status: jest.fn().mockImplementation(function (code) {
+      code: jest.fn().mockImplementation(function (code) {
         responseCode = code;
         return this;
       }),
@@ -181,25 +181,32 @@ describe('Shows routes', () => {
     // Arrange
     const req = {
       params: {
-        id: showInput._id,
+        id: showsPayload[0]._id,
       },
     };
 
     let response;
 
     const reply = {
+      code: jest.fn().mockImplementation(function (code) {
+        responseCode = code;
+        return this;
+      }),
       send: jest.fn().mockImplementation((res) => {
         response = res;
       }),
     };
 
-    mockingoose(ShowModel).toReturn(showInput, 'findOneAndRemove');
+    mockingoose(ShowModel).toReturn(showsPayload[0], 'findOneAndDelete');
 
     // Act
     await deleteShow(req, reply);
 
     // Assert
-    expect(response).toHaveProperty('message', 'Show deleted');
+    expect(response).toHaveProperty(
+      'message',
+      `Show id ${showsPayload[0]._id} deleted`,
+    );
     expect(response).toBeInstanceOf(Object);
     expect(reply.send).toBeCalledTimes(1);
   });
