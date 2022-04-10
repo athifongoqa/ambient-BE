@@ -82,4 +82,38 @@ describe('shows integration tests', () => {
     assert.equal(statusCode, 201);
     assert.equal(body.name, showInput.name);
   });
+
+  it('Update a show', async () => {
+    const show = new Show(showInput);
+    const returnedShow = await show.save();
+
+    const { statusCode, body } = await request(app.server)
+      .put(`/api/shows/${returnedShow._id}`)
+      .send({ name: 'Updated Show Name' });
+
+    assert.equal(statusCode, 200);
+    assert.equal(body.name, 'Updated Show Name');
+    assert.equal(body.creator_id, showInput.creator_id);
+  });
+
+  it('Update a show with non existing id', async () => {
+    const show = new Show(showInput);
+    await show.save();
+
+    const { statusCode, body } = await request(app.server)
+      .put(`/api/shows/1234567890abcdef12345678`)
+      .send({ name: 'Updated Show Name' });
+
+    assert.equal(statusCode, 404);
+    assert.equal(body.message, 'Show not found');
+  });
+
+  it('Update a show with invalid length id', async () => {
+    const { statusCode, body } = await request(app.server)
+      .put('/api/shows/123')
+      .send({ name: 'Updated Show Name' });
+
+    assert.equal(statusCode, 500);
+    assert.equal(body.message, 'The server returned an error');
+  });
 });
