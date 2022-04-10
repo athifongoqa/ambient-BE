@@ -21,10 +21,11 @@ describe('shows integration tests', () => {
     await app.close();
   });
 
-  it('Get all shows', async () => {
+  it('Get all shows when there is none', async () => {
     const { statusCode, body } = await request(app.server).get('/api/shows/');
 
-    assert.equal(statusCode, 404 || 200);
+    assert.equal(statusCode, 404);
+    assert.equal(body.message, 'There are no shows');
   });
 
   // it('Get a single show', async () => {
