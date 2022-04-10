@@ -41,19 +41,24 @@ describe('shows integration tests', () => {
     assert.equal(body[0].name, showInput.name);
   });
 
-  // it('Get a single show', async () => {
-  //   const { statusCode, body } = await request(app.server).get(
-  //     '/api/shows/6250b9b7385d9a2cf492127c',
-  //   );
+  it('Get a single show', async () => {
+    const show = new Show(showInput);
+    const returnedShow = await show.save();
 
-  //   assert.equal(statusCode, 200);
-  //   assert.equal(body.name, 'No name show 1');
-  //   assert.equal(typeof body, 'object');
-  // });
+    const { statusCode, body } = await request(app.server).get(
+      `/api/shows/${returnedShow._id}`,
+    );
+
+    assert.equal(statusCode, 200);
+    assert.equal(body.name, showInput.name);
+  });
 
   it('Get a single show with non existing id', async () => {
+    const show = new Show(showInput);
+    await show.save();
+
     const { statusCode, body } = await request(app.server).get(
-      '/api/shows/6250b9b7385d9a2cf492127d',
+      `/api/shows/1234567890abcdef12345678`,
     );
 
     assert.equal(statusCode, 404);
@@ -66,6 +71,6 @@ describe('shows integration tests', () => {
     );
 
     assert.equal(statusCode, 500);
-    assert.notEqual(body.message.length, 0);
+    assert.equal(body.message, 'The server returned an error');
   });
 });
