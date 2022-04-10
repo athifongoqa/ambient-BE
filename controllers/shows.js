@@ -11,7 +11,6 @@ const getShow = async function (req, reply) {
   const { id } = req.params;
 
   const show = await Show.findById(id);
-  // eslint-disable-next-line no-unused-expressions
   show
     ? reply.send(show)
     : reply.status(404).send({ message: 'Show not found' });
