@@ -1,6 +1,7 @@
 /* global before, after, it, describe */
 const request = require('supertest');
 const assert = require('assert');
+const db = require('../tests/testdb');
 const { build } = require('../tests/routes/helper');
 
 describe('shows integration tests', () => {
@@ -8,9 +9,15 @@ describe('shows integration tests', () => {
 
   before(async () => {
     app = await build();
+    await db.connect();
+  });
+
+  beforeEach(async () => {
+    await db.clearDatabase();
   });
 
   after(async () => {
+    await db.closeDatabase();
     await app.close();
   });
 
