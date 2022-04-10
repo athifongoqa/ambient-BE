@@ -11,9 +11,7 @@ const getShow = async function (req, reply) {
   const { id } = req.params;
 
   const show = await Show.findById(id);
-  show
-    ? reply.send(show)
-    : reply.status(404).send({ message: 'Show not found' });
+  show ? reply.send(show) : reply.code(404).send({ message: 'Show not found' });
 };
 
 const createShow = async (req, reply) => {
@@ -23,7 +21,7 @@ const createShow = async (req, reply) => {
   returnedShow
     ? reply.code(201).send(returnedShow)
     : reply
-        .status(400)
+        .code(400)
         .send({ message: 'It was not possible to create the show' });
 };
 
@@ -36,17 +34,17 @@ const updateShow = async (req, reply) => {
 
   updatedShow
     ? reply.send(updatedShow)
-    : reply.status(404).send({ message: 'Show not found' });
+    : reply.code(404).send({ message: 'Show not found' });
 };
 
 const deleteShow = async (req, reply) => {
   const { id } = req.params;
 
-  const deletedShow = await Show.findOneAndRemove(id);
+  const deletedShow = await Show.findOneAndDelete({ _id: { $eq: id } });
 
   deletedShow
-    ? reply.send({ message: 'Show deleted' })
-    : reply.status(404).send({ message: 'Show not found' });
+    ? reply.send({ message: `Show id ${deletedShow._id} deleted` })
+    : reply.code(404).send({ message: 'Show not found' });
 };
 
 module.exports = {
