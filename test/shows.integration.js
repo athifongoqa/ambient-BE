@@ -73,4 +73,13 @@ describe('shows integration tests', () => {
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
   });
+
+  it('Create a show', async () => {
+    const { statusCode, body } = await request(app.server)
+      .post('/api/shows/')
+      .send(showInput);
+
+    assert.equal(statusCode, 201);
+    assert.equal(body.name, showInput.name);
+  });
 });

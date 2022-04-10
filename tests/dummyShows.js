@@ -2,7 +2,7 @@ const showInput = {
   creator_id: '12345678-90ab-cdef-1234-567890abcdef',
   name: 'Test Show Name',
   description: 'Test show description',
-  type: 'test type',
+  date_created: '2020-01-01T20:00:00.000Z',
   date_scheduled: '2020-01-01T20:00:00.000Z',
 };
 
