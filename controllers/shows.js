@@ -2,44 +2,49 @@ const Show = require('../models/show.model');
 
 const getShows = async (req, reply) => {
   const shows = await Show.find();
-  reply.send(shows);
+  shows.length !== 0
+    ? reply.send(shows)
+    : reply.code(404).send({ message: 'There are no shows' });
 };
 
 const getShow = async function (req, reply) {
   const { id } = req.params;
-  const show = await Show.findById(id);
 
-  try {
-    // eslint-disable-next-line no-unused-expressions
-    show
-      ? reply.send(show)
-      : reply.status(404).send({ message: 'Show not found' });
-  } catch (error) {
-    reply.status(500).send({ message: error.message });
-  }
+  const show = await Show.findById(id);
+  show ? reply.send(show) : reply.code(404).send({ message: 'Show not found' });
 };
 
 const createShow = async (req, reply) => {
   const show = new Show(req.body);
   const returnedShow = await show.save();
-  reply.code(201).send(returnedShow);
+
+  returnedShow
+    ? reply.code(201).send(returnedShow)
+    : reply
+        .code(400)
+        .send({ message: 'It was not possible to create the show' });
 };
 
 const updateShow = async (req, reply) => {
   const { id } = req.params;
+
   const updatedShow = await Show.findByIdAndUpdate(id, req.body, {
     new: true,
   });
 
-  reply.send(updatedShow);
+  updatedShow
+    ? reply.send(updatedShow)
+    : reply.code(404).send({ message: 'Show not found' });
 };
 
 const deleteShow = async (req, reply) => {
   const { id } = req.params;
 
-  const deletedShow = await Show.findOneAndRemove(id);
-  // eslint-disable-next-line no-underscore-dangle
-  reply.send({ message: `${deletedShow._id} has been deleted` });
+  const deletedShow = await Show.findOneAndDelete({ _id: { $eq: id } });
+
+  deletedShow
+    ? reply.send({ message: `Show id ${deletedShow._id} deleted` })
+    : reply.code(404).send({ message: 'Show not found' });
 };
 
 module.exports = {
