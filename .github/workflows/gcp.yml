@@ -1,0 +1,57 @@
+---
+name: Build and Push NodeJS Image to Google Cloud Platform
+on:
+  push:
+    branches: [ cd/gcp ]
+jobs:
+  build-push-gcr:
+    name: Build and Push Docker Image to GCP Artifact Registry
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ambient
+      PROJECT_ID: ambient-code-344714
+      REPO_ID: ambient
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - uses: google-github-actions/setup-gcloud@v0
+      with:
+        service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ env.PROJECT_ID }}
+        export_default_credentials: true
+
+    - name: Build Docker Image
+      run: docker build -t $IMAGE_NAME:latest .
+
+    - name: Configure Docker Client
+      run: |-
+        gcloud auth configure-docker --quiet
+        gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
+        
+    - name: Push Image to Artifact Registry
+      run: |-
+        docker build -t europe-west3-docker.pkg.dev/$PROJECT_ID/$REPO_ID/$IMAGE_NAME:latest .
+        docker push europe-west3-docker.pkg.dev/$PROJECT_ID/$REPO_ID/$IMAGE_NAME:latest
+  
+  deploy-run:
+    needs: build-push-gcr
+    name: Deploy Image with GCP Cloud Run
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2 
+               
+      - name: Deploy to Google Cloud Run
+        id: deploy-run
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: ambient
+          image: europe-west3-docker.pkg.dev/ambient-code-344714/ambient/ambient:latest
+          region: europe-west3
+          flags: --allow-unauthenticated
+          credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
+      - name: Test Google Cloud Functions deployment 
+        run: curl "${{ steps.deploy-run.outputs.url }}"
