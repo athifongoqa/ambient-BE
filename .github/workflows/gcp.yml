@@ -1,5 +1,5 @@
 ---
-name: Build and Push NodeJS Image to Google Cloud Platform
+name: Build, Push and Deploy NodeJS Image w/ Google Cloud Platform
 on:
   push:
     branches: [ main ]
