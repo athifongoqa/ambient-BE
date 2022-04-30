@@ -1,23 +1,61 @@
 const {
+  addNewUser,
+  getAllUsers,
+  getSingleUser,
+  updateSingleUser,
+  deleteSingleUser,
+} = require('../../../controllers/users');
+
+const {
   getUsersOpts,
   getUserOpts,
   postUserOpts,
   deleteUserOpts,
   updateUserOpts,
-} = require('./schema');
+} = require('./schema')
 
 module.exports = async function (fastify, opts) {
   fastify.register(require('fastify-prettier'), {
     alwaysOn: true,
   });
 
-  fastify.get('/', getUsersOpts);
+  fastify.route({
+    method: "GET",
+    url: "/",
+    schema: getUsersOpts,
+    preValidation: [fastify.authenticate],
+    handler: getAllUsers
+  });
 
-  fastify.get('/:username', getUserOpts);
+  fastify.route({
+    method: "GET",
+    url: "/:username",
+    schema: getUserOpts,
+    preValidation: [fastify.authenticate],
+    handler: getSingleUser
+  });
 
-  fastify.post('/', postUserOpts);
+  fastify.route({
+    method: "POST",
+    url: "/",
+    schema: postUserOpts,
+    preValidation: [fastify.authenticate],
+    handler: addNewUser
+  });
 
-  fastify.patch('/:id', updateUserOpts);
+  fastify.route({
+    method: "PATCH",
+    url: "/:id",
+    schema: updateUserOpts,
+    preValidation: [fastify.authenticate],
+    handler: updateSingleUser
+  });
 
-  fastify.delete('/:id', deleteUserOpts);
+  fastify.route({
+    method: "DELETE",
+    url: "/:id",
+    schema: deleteUserOpts,
+    preValidation: [fastify.authenticate],
+    handler: deleteSingleUser
+  });
 };
