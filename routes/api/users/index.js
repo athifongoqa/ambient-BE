@@ -23,7 +23,7 @@ module.exports = async function (fastify, opts) {
     method: "GET",
     url: "/",
     schema: getUsersOpts,
-    preValidation: [fastify.authenticate],
+    preValidation: [fastify.authenticate, fastify.isAdmin],
     handler: getAllUsers
   });
 
@@ -31,7 +31,7 @@ module.exports = async function (fastify, opts) {
     method: "GET",
     url: "/:username",
     schema: getUserOpts,
-    preValidation: [fastify.authenticate],
+    preValidation: [fastify.authenticate, fastify.isAdmin],
     handler: getSingleUser
   });
 
@@ -39,7 +39,7 @@ module.exports = async function (fastify, opts) {
     method: "POST",
     url: "/",
     schema: postUserOpts,
-    preValidation: [fastify.authenticate],
+    preValidation: [fastify.authenticate, fastify.isAdmin],
     handler: addNewUser
   });
 
@@ -47,7 +47,7 @@ module.exports = async function (fastify, opts) {
     method: "PATCH",
     url: "/:id",
     schema: updateUserOpts,
-    preValidation: [fastify.authenticate],
+    preValidation: [fastify.authenticate, fastify.isAdmin],
     handler: updateSingleUser
   });
 
@@ -55,7 +55,7 @@ module.exports = async function (fastify, opts) {
     method: "DELETE",
     url: "/:id",
     schema: deleteUserOpts,
-    preValidation: [fastify.authenticate],
+    preValidation: [fastify.authenticate, fastify.isAdmin],
     handler: deleteSingleUser
   });
 };
