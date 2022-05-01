@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* global before, beforeEach, after, it, describe */
 const request = require('supertest');
 const assert = require('assert');
 const db = require('../testdb');
@@ -63,7 +65,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .get(`/api/shows/1234567890abcdef12345678`)
+      .get('/api/shows/1234567890abcdef12345678')
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
     assert.equal(statusCode, 404);
@@ -108,7 +110,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .patch(`/api/shows/1234567890abcdef12345678`)
+      .patch('/api/shows/1234567890abcdef12345678')
       .send({ name: 'Updated Show Name' })
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
