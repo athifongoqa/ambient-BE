@@ -9,30 +9,33 @@ const user = require('../../controllers/users')
 let app;
 let fastify;
 
-function createDummyUser(username, displayName, email, avatar) {
+function createDummyUser(username, displayName, email, avatar, role) {
   return {
-    username,
-    displayName,
-    email,
-    avatar,
+    username: username,
+    displayName: displayName,
+    email: email,
+    avatar: avatar,
+    role: role
   };
 }
 
 const userPayLoad = {
   _id: expect.any(String),
-  username: 'athiF',
-  displayName: 'Athi F',
+  username: 'dummyOne',
+  displayName: 'Dumb',
   email: 'dummy123.dummy@code.berlin',
   avatar: 'img.ip/464558.jpg',
+  role: 'member',
   followers: [],
   following: [],
 };
 
 admin_user = createDummyUser(
-  'athi',
-  'Athi',
-  'dummy12.dummy@code.berlin',
+  'master',
+  'master',
+  'master.dummy@code.berlin',
   'img.ip/464558.jpg',
+  'admin'
 );
 
 beforeAll(async () => {
@@ -54,123 +57,119 @@ afterAll(async () => {
 
 describe('E2E User endpoints', () => {
   const dummy1 = createDummyUser(
-    'athiF',
-    'Athi F',
+    'dummyOne',
+    'Dumb',
     'dummy123.dummy@code.berlin',
     'img.ip/464558.jpg',
+    'member',
   );
 
   const dummy2 = createDummyUser(
-    'athiFo',
-    'Athi Fo',
+    'dummyTwo',
+    'Dumb Dumb',
     'dummy1234.dummy@code.berlin',
     'img.ip/464559.jpg',
+    'member',
   );
   
   it('should POST a single user', async () => {
-    let admin_access_token
-    fastify.signIn({body: admin_user}).then(async (token) => {
-      admin_access_token = token
-      
-      // When (Only 1 operation)
-      const { statusCode, body } = await request(app.server)
-      .post('/api/users/')
-      .send(dummy1)
-      .set({ Authorization: `Bearer ${admin_access_token}` });
-      
-      // Then
-      expect(statusCode).toBe(200);
-      expect(body).toBeInstanceOf(Object);
-      expect(body).toMatchObject(userPayLoad);
+    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+      return token
     }).catch((err) => {
       return err
     })
-
+    
+    // When (Only 1 operation)
+    const { statusCode, body } = await request(app.server)
+    .post('/api/users/')
+    .send(dummy1)
+    .set({ Authorization: `Bearer ${adminAccessToken}` });
+    
+    // Then
+    expect(statusCode).toBe(200);
+    console.log(body)
+    expect(body).toBeInstanceOf(Object);
+    expect(body).toEqual(userPayLoad);
   });
   
   it('should GET all users', async () => {
     // Given  
-    let admin_access_token;
     await users.addNewUser({body: dummy2})
-    fastify.signIn({body: admin_user})
-    .then(async (token) => {
-      admin_access_token = token
-
-      // When
-      const { body, statusCode } = await request(app.server)
-      .get('/api/users/')
-      .set({ Authorization: `Bearer ${admin_access_token}` })
-      
-      // Then
-      expect(statusCode).toBe(200);
-      expect(body).toBeInstanceOf(Object);
-      expect(body.allUsers[0]).toMatchObject(dummy1);
-      expect(body.allUsers[1]).toMatchObject(dummy2);
-      expect(body.allUsers[2]).toMatchObject(admin_user);
+    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+      return token
     }).catch((err) => {
       return err
     })
+
+    // When
+    const { body, statusCode } = await request(app.server)
+    .get('/api/users/')
+    .set({ Authorization: `Bearer ${adminAccessToken}` })
+    
+    // Then
+    expect(statusCode).toBe(200);
+    expect(body).toBeInstanceOf(Object);
+    expect(body.allUsers[0]).toMatchObject(dummy2);
+    expect(body.allUsers[1]).toMatchObject(admin_user);
   });
   
   it('should GET a single user', async () => {
     // Given
-    let admin_access_token
     await user.addNewUser({ body: dummy1 });
-    fastify.signIn({body: admin_user})
-    .then(async (token) => {
-      admin_access_token = token
-      
-      // When
-      const { body, statusCode } = await request(app.server)
-      .get(`/api/users/${dummy1.username}`)
-      .set({ Authorization: `Bearer ${admin_access_token}` })
-      
-      // Then
-      expect(statusCode).toBe(200);
-      expect(body).toBeInstanceOf(Object);
+    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+      return token
     }).catch((err) => {
       return err
     })
+    
+    // When
+    const { body, statusCode } = await request(app.server)
+    .get(`/api/users/${dummy1.username}`)
+    .set({ Authorization: `Bearer ${adminAccessToken}` })
+    
+    // Then
+    expect(statusCode).toBe(200);
+    expect(body).toBeInstanceOf(Object);
     });
     
     it('should DELETE a single user', async () => {
       // Given
       const newUser = await user.addNewUser({ body: dummy2 });
-      fastify.signIn({body: admin_user}).then(async (token) => {
-        admin_access_token = token
-        
-        // When
-        const { body, statusCode } = await request(app.server)
-        .delete(`/api/users/${newUser._id}`)
-        .set({ Authorization: `Bearer ${admin_access_token}` });
-        
-        // Then
-        expect(statusCode).toBe(200);
-        expect(body.message).toMatch(`${newUser._id} has been deleted`);
+      const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+        return token
       }).catch((err) => {
         return err
       })
+
+      // When
+      const { body, statusCode } = await request(app.server)
+      .delete(`/api/users/${newUser._id}`)
+      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      
+      // Then
+      expect(statusCode).toBe(200);
+      expect(body.message).toMatch(`${newUser._id} has been deleted`);
     
   });
   
   it('should UPDATE a single user', async () => {
     // Given
-    let admin_access_token;
     const newUser = await user.addNewUser({ body: dummy2 });
     const newDisplayName = 'Ronald';
-    fastify.signIn({body: admin_user}).then(async (token) => {
-      // When
-      admin_access_token = token
-      const { body, statusCode } = await request(app.server)
-        .patch(`/api/users/${newUser._id}`)
-        .send({ displayName: newDisplayName })
-        .set({ Authorization: `Bearer ${admin_access_token}` });
-  
-      // Then
-      expect(statusCode).toBe(200);
-      expect(body.updatedUser.displayName).toMatch(newDisplayName);
+    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+      return token
     }).catch((err) => {
       return err
     })
+
+    // When
+    const { body, statusCode } = await request(app.server)
+      .patch(`/api/users/${newUser._id}`)
+      .send({ displayName: newDisplayName })
+      .set({ Authorization: `Bearer ${adminAccessToken}` });
+
+    // Then
+    expect(statusCode).toBe(200);
+    expect(body.updatedUser.displayName).toMatch(newDisplayName);
   });
 });
