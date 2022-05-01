@@ -1,4 +1,4 @@
-# Ambient NodeJS-Fastify
+# **Ambient NodeJS-Fastify**
 
 ![alt text](assets/ambient.svg)
 
