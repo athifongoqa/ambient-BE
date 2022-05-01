@@ -25,7 +25,17 @@ async function build() {
   return app;
 }
 
+const getAccessToken = async (user) => {
+  const fastify = await require('fastify')();
+  const jwt = await require('../plugins/jwt');
+  fastify.register(jwt);
+  await fastify.ready();
+  const token = await fastify.signIn({ body: user });
+  return token;
+};
+
 module.exports = {
   config,
   build,
+  getAccessToken,
 };
