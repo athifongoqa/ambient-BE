@@ -17,13 +17,16 @@ module.exports = fp(async function(fastify, opts) {
   fastify.decorate("signIn", async function(req, reply) {
     try {
         // add/find user
-        const user = userController.addNewUser({body: req.body})
-        // sign jwt with their id
-        const token = fastify.jwt.sign({ _id: user._id})
-        // return jwt token
+        const token = await userController.addNewUser({body: req.body})
+        .then(user => {
+            // sign jwt with their id
+            let token = fastify.jwt.sign({ _id: user._id, role: user.role})
+            // return jwt token
+            return token
+        })
         return token
     } catch (err) {
-        reply.send(err)
+        return err
     }
   })
 })
