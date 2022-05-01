@@ -19,6 +19,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  role: {
+    type: String,
+    required: true,
+    default: 'member',
+  },
   following: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'following',
@@ -27,6 +32,8 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'followers',
   }],
+},{
+  timestamps: true
 });
 
-module.exports = mongoose.models.User || mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);
