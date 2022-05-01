@@ -7,22 +7,60 @@ const {
   updateShowOpts,
 } = require('./schema');
 
+const {
+  getShow,
+  getShows,
+  createShow,
+  deleteShow,
+  updateShow,
+} = require('../../../controllers/shows');
+
 module.exports = async function (fastify) {
   fastify.register(fastifyPrettier, {
     alwaysOn: true,
   });
 
-  fastify.setErrorHandler(function (error, request, reply) {
+  fastify.setErrorHandler((error, request, reply) => {
     reply.code(500).send({ message: 'The server returned an error' });
   });
 
-  fastify.get('/', getShowsOpts);
+  fastify.route({
+    method: 'GET',
+    url: '/',
+    schema: getShowsOpts,
+    preValidation: [fastify.authenticate],
+    handler: getShows,
+  });
 
-  fastify.get('/:id', getShowOpts);
+  fastify.route({
+    method: 'GET',
+    url: '/:id',
+    schema: getShowOpts,
+    preValidation: [fastify.authenticate],
+    handler: getShow,
+  });
 
-  fastify.post('/', postShowOpts);
+  fastify.route({
+    method: 'POST',
+    url: '/',
+    schema: postShowOpts,
+    preValidation: [fastify.authenticate],
+    handler: createShow,
+  });
 
-  fastify.delete('/:id', deleteShowOpts);
+  fastify.route({
+    method: 'PATCH',
+    url: '/:id',
+    schema: updateShowOpts,
+    preValidation: [fastify.authenticate],
+    handler: updateShow,
+  });
 
-  fastify.patch('/:id', updateShowOpts);
+  fastify.route({
+    method: 'DELETE',
+    url: '/:id',
+    schema: deleteShowOpts,
+    preValidation: [fastify.authenticate],
+    handler: deleteShow,
+  });
 };

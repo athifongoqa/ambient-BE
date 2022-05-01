@@ -1,11 +1,3 @@
-const {
-  getShow,
-  getShows,
-  createShow,
-  deleteShow,
-  updateShow,
-} = require('../../../controllers/shows');
-
 const returnedShow = {
   type: 'object',
   properties: {
@@ -36,135 +28,120 @@ const show = {
 };
 
 const getShowsOpts = {
-  schema: {
-    tags: ['show'],
-    response: {
-      200: {
-        description: 'Get all shows',
-        type: 'array',
-        items: returnedShow,
-      },
-      404: {
-        description: 'No shows found',
-        type: 'object',
-        properties: {
-          message: { type: 'string', example: 'There are no shows' },
-        },
+  tags: ['show'],
+  response: {
+    200: {
+      description: 'Get all shows',
+      type: 'array',
+      items: returnedShow,
+    },
+    404: {
+      description: 'No shows found',
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'There are no shows' },
       },
     },
   },
-  handler: getShows,
 };
 
 const getShowOpts = {
-  schema: {
-    params: {
-      id: {
-        type: 'string',
-        description: 'Id of show to get',
-      },
+  params: {
+    id: {
+      type: 'string',
+      description: 'Id of show to get',
     },
-    tags: ['show'],
-    response: {
-      200: {
-        ...returnedShow,
-        description: 'Get a single show',
-      },
-      404: {
-        description: 'No show found',
-        type: 'object',
-        properties: {
-          message: { type: 'string', example: 'Show not found' },
-        },
+  },
+  tags: ['show'],
+  response: {
+    200: {
+      ...returnedShow,
+      description: 'Get a single show',
+    },
+    404: {
+      description: 'No show found',
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Show not found' },
       },
     },
   },
-  handler: getShow,
 };
 
 const postShowOpts = {
-  schema: {
-    tags: ['show'],
-    body: {
-      required: [
-        'creator_id',
-        'name',
-        'description',
-        'date_created',
-        'date_scheduled',
-      ],
-      ...show,
-    },
-    response: {
-      201: {
-        ...returnedShow,
-        description: 'Create a new show',
-      },
+  tags: ['show'],
+  body: {
+    required: [
+      'creator_id',
+      'name',
+      'description',
+      'date_created',
+      'date_scheduled',
+    ],
+    ...show,
+  },
+  response: {
+    201: {
+      ...returnedShow,
+      description: 'Create a new show',
     },
   },
-  handler: createShow,
 };
 
 const deleteShowOpts = {
-  schema: {
-    params: {
-      id: {
-        type: 'string',
-        description: 'Id of show to delete',
+  params: {
+    id: {
+      type: 'string',
+      description: 'Id of show to delete',
+    },
+  },
+  tags: ['show'],
+  response: {
+    200: {
+      description: 'Delete show',
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Show deleted' },
       },
     },
-    tags: ['show'],
-    response: {
-      200: {
-        description: 'Delete show',
-        type: 'object',
-        properties: {
-          message: { type: 'string', example: 'Show deleted' },
-        },
-      },
-      404: {
-        description: 'No show found',
-        type: 'object',
-        properties: {
-          message: { type: 'string', example: 'Show not found' },
-        },
+    404: {
+      description: 'No show found',
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Show not found' },
       },
     },
   },
-  handler: deleteShow,
 };
 
 const updateShowOpts = {
-  schema: {
-    params: {
-      id: {
-        type: 'string',
-        description: 'Id of show to update',
-      },
+  params: {
+    id: {
+      type: 'string',
+      description: 'Id of show to update',
     },
-    body: {
+  },
+  body: {
+    type: 'object',
+    properties: {
+      name: { type: 'string', example: 'Update Show Name' },
+      type: { type: 'string', example: 'Live Show' },
+    },
+  },
+  tags: ['show'],
+  response: {
+    200: {
+      ...returnedShow,
+      description: 'Updated show',
+    },
+    404: {
+      description: 'No show found',
       type: 'object',
       properties: {
-        name: { type: 'string', example: 'Update Show Name' },
-        type: { type: 'string', example: 'Live Show' },
-      },
-    },
-    tags: ['show'],
-    response: {
-      200: {
-        ...returnedShow,
-        description: 'Updated show',
-      },
-      404: {
-        description: 'No show found',
-        type: 'object',
-        properties: {
-          message: { type: 'string', example: 'Show not found' },
-        },
+        message: { type: 'string', example: 'Show not found' },
       },
     },
   },
-  handler: updateShow,
 };
 
 module.exports = {
