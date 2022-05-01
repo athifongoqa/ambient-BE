@@ -6,6 +6,7 @@ const returnedUser = {
     displayName: { type: 'string' },
     email: { type: 'string' },
     avatar: { type: 'string' },
+    role: { type: 'string' },
     following: {
       type: 'array',
       items: { type: 'string', format: 'uuid' },
@@ -27,6 +28,7 @@ const user = {
       type: 'string',
       example: 'https://avatars3.githubusercontent.com/u/1234567',
     },
+    role: { type: 'string', example: 'member' },
   },
 };
 
