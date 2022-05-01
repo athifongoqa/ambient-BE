@@ -31,7 +31,15 @@ const showsPayload = [
   },
 ];
 
+const adminUser = {
+  username: 'athi',
+  displayName: 'Athi',
+  email: 'dummy12.dummy@code.berlin',
+  avatar: 'img.ip/464558.jpg',
+};
+
 module.exports = {
   showInput,
   showsPayload,
+  adminUser,
 };

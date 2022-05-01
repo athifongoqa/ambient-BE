@@ -1,10 +1,8 @@
-'use strict';
-
-// This file contains code that we reuse
-// between our tests.
-
 const { build: buildApplication } = require('fastify-cli/helper');
 const path = require('path');
+const Fastify = require('fastify');
+const jwt = require('../plugins/jwt');
+
 const AppPath = path.join(__dirname, '../', 'app.js');
 
 // Fill in this config with all the configurations
@@ -25,7 +23,16 @@ async function build() {
   return app;
 }
 
+const getAccessToken = async (user) => {
+  const fastify = await Fastify();
+  fastify.register(jwt);
+  await fastify.ready();
+  const token = await fastify.signIn({ body: user });
+  return token;
+};
+
 module.exports = {
   config,
   build,
+  getAccessToken,
 };

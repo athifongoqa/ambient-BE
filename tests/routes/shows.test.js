@@ -188,8 +188,7 @@ describe('Shows routes', () => {
     let response;
 
     const reply = {
-      code: jest.fn().mockImplementation(function (code) {
-        responseCode = code;
+      code: jest.fn().mockImplementation(function () {
         return this;
       }),
       send: jest.fn().mockImplementation((res) => {
