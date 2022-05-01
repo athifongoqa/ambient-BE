@@ -1,11 +1,3 @@
-const {
-  addNewUser,
-  getAllUsers,
-  getSingleUser,
-  updateSingleUser,
-  deleteSingleUser,
-} = require('../../../controllers/users');
-
 const returnedUser = {
   type: 'object',
   properties: {
@@ -39,112 +31,97 @@ const user = {
 };
 
 const getUsersOpts = {
-  schema: {
-    tags: ['user'],
-    response: {
-      200: {
-        type: 'object',
-        description: 'Get all users',
-        properties: {
-          allUsers: {
-            type: 'array',
-            items: returnedUser,
-          },
+  tags: ['user'],
+  response: {
+    200: {
+      type: 'object',
+      description: 'Get all users',
+      properties: {
+        allUsers: {
+          type: 'array',
+          items: returnedUser,
         },
       },
     },
   },
-  handler: getAllUsers,
 };
 
 const getUserOpts = {
-  schema: {
-    params: {
-      username: {
-        type: 'string',
-        description: 'Username of user to get',
-      },
-    },
-    tags: ['user'],
-    response: {
-      200: {
-        ...returnedUser,
-        description: 'Get a single user',
-      },
+  params: {
+    username: {
+      type: 'string',
+      description: 'Username of user to get',
     },
   },
-  handler: getSingleUser,
+  tags: ['user'],
+  response: {
+    200: {
+      ...returnedUser,
+      description: 'Get a single user',
+    },
+  },
 };
 
 const postUserOpts = {
-  schema: {
-    tags: ['user'],
-    body: {
-      required: ['username', 'email'],
-      ...user,
-    },
-    response: {
-      200: {
-        ...returnedUser,
-        description: 'Create a new user',
-      },
+  tags: ['user'],
+  body: {
+    required: ['username', 'email'],
+    ...user,
+  },
+  response: {
+    200: {
+      ...returnedUser,
+      description: 'Create a new user',
     },
   },
-  handler: addNewUser,
 };
 
 const deleteUserOpts = {
-  schema: {
-    params: {
-      id: {
-        type: 'string',
-        description: 'Id of user to delete',
-      },
+  params: {
+    id: {
+      type: 'string',
+      description: 'Id of user to delete',
     },
-    tags: ['user'],
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          message: {
-            type: 'string',
-            example: '1234567890abcdef12345678 has been deleted',
-          },
+  },
+  tags: ['user'],
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: '1234567890abcdef12345678 has been deleted',
         },
       },
     },
   },
-  handler: deleteSingleUser,
 };
 
 const updateUserOpts = {
-  schema: {
-    params: {
-      id: {
-        type: 'string',
-        description: 'Id of user to update',
-      },
-    },
-    body: {
-      type: 'object',
-      properties: {
-        displayName: { type: 'string', example: 'Updated Name' },
-      },
-    },
-    tags: ['user'],
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          updatedUser: {
-            ...returnedUser,
-          },
-        },
-        description: 'Updated user',
-      },
+  params: {
+    id: {
+      type: 'string',
+      description: 'Id of user to update',
     },
   },
-  handler: updateSingleUser,
+  body: {
+    type: 'object',
+    properties: {
+      displayName: { type: 'string', example: 'Updated Name' },
+    },
+  },
+  tags: ['user'],
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        updatedUser: {
+          ...returnedUser,
+        },
+      },
+      description: 'Updated user',
+    },
+  },
 };
 
 module.exports = {
