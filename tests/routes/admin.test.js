@@ -55,7 +55,7 @@ afterAll(async () => {
   await db.closeDatabase();
 }, 30000);
 
-describe('E2E User endpoints', () => {
+describe('E2E Admin endpoints', () => {
   const dummy1 = createDummyUser(
     'dummyOne',
     'Dumb',
@@ -72,27 +72,7 @@ describe('E2E User endpoints', () => {
     'member',
   );
   
-  it('should POST a single user', async () => {
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-      return token
-    }).catch((err) => {
-      return err
-    })
-    
-    // When (Only 1 operation)
-    const { statusCode, body } = await request(app.server)
-    .post('/api/users/')
-    .send(dummy1)
-    .set({ Authorization: `Bearer ${adminAccessToken}` });
-    
-    // Then
-    expect(statusCode).toBe(200);
-    console.log(body)
-    expect(body).toBeInstanceOf(Object);
-    expect(body).toEqual(userPayLoad);
-  });
-  
-  it('should GET all users', async () => {
+  it('should GET all admin users', async () => {
     // Given  
     await users.addNewUser({body: dummy2})
     const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
@@ -103,59 +83,18 @@ describe('E2E User endpoints', () => {
 
     // When
     const { body, statusCode } = await request(app.server)
-    .get('/api/users/')
+    .get('/api/admin/')
     .set({ Authorization: `Bearer ${adminAccessToken}` })
     
     // Then
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
-    expect(body.allUsers[0]).toMatchObject(dummy2);
-    expect(body.allUsers[1]).toMatchObject(admin_user);
+    expect(body.allAdminUsers[0]).toMatchObject(admin_user);
   });
-  
-  it('should GET a single user', async () => {
-    // Given
-    await user.addNewUser({ body: dummy1 });
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-      return token
-    }).catch((err) => {
-      return err
-    })
-    
-    // When
-    const { body, statusCode } = await request(app.server)
-    .get(`/api/users/${dummy1.username}`)
-    .set({ Authorization: `Bearer ${adminAccessToken}` })
-    
-    // Then
-    expect(statusCode).toBe(200);
-    expect(body).toBeInstanceOf(Object);
-    });
-    
-    it('should DELETE a single user', async () => {
-      // Given
-      const newUser = await user.addNewUser({ body: dummy2 });
-      const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-        return token
-      }).catch((err) => {
-        return err
-      })
 
-      // When
-      const { body, statusCode } = await request(app.server)
-      .delete(`/api/users/${newUser._id}`)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
-      
-      // Then
-      expect(statusCode).toBe(200);
-      expect(body.message).toMatch(`${newUser._id} has been deleted`);
-    
-  });
-  
-  it('should UPDATE a single user', async () => {
+  it(`should UPDATE a single user's role from member to admin`, async () => {
     // Given
     const newUser = await user.addNewUser({ body: dummy2 });
-    const newDisplayName = 'Ronald';
     const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
       return token
     }).catch((err) => {
@@ -164,12 +103,12 @@ describe('E2E User endpoints', () => {
 
     // When
     const { body, statusCode } = await request(app.server)
-      .patch(`/api/users/${newUser._id}`)
-      .send({ displayName: newDisplayName })
+      .patch(`/api/admin/${newUser.username}`)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
     // Then
     expect(statusCode).toBe(200);
-    expect(body.updatedUser.displayName).toMatch(newDisplayName);
+    expect(body).toBeInstanceOf(Object);
+    expect(body.message).toMatch(`${newUser.username} has been updated to admin.`);
   });
 });
