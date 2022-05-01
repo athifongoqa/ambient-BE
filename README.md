@@ -37,36 +37,36 @@ Here is a description of the content of each folder in the directory:
 ├── .github                 # Convention folder used to place Github related folders and files
 │   └── workflows           # Configuration folder containing yml files for GitHub Actions
 │       └── gcp             # yml file for handling deployment jobs
-├── controllers             #
-│   ├── shows               # 
-│   └── users               #           
-├── models                  #
-│   ├── shows.model         #      
-│   └── users.model         #      
-├── plugins                 #
-│   ├── formbody            #    
-│   ├── jwt                 #
-│   ├── sockets             #   
-│   ├── spotify             #   
-│   └── swagger             #             
+├── controllers             # Handler functions
+│   ├── shows                
+│   └── users                         
+├── models                  # Show & User models & schemas
+│   ├── shows.model             
+│   └── users.model           
+├── plugins                 
+│   ├── formbody            # Formbody parser  
+│   ├── jwt                 # JWT-related decorators
+│   ├── sockets             # Fastify-socket.io events and connection 
+│   ├── spotify             # Spotify OAuth support 
+│   └── swagger             # Documentation support using Swagger          
 ├── routes                  #  
 │   ├── api                 #
 │   │   ├── shows           #
-│   │   │   ├── index       #
-│   │   │   └── schema      # 
+│   │   │   ├── index       # Show endpoints
+│   │   │   └── schema      # Show schema definitions
 │   │   └── users           #
-│   │       ├── index       #
-│   │       └── schema      #
-│   ├── spotify             #
-│   │   └── index           #
-│   └── root                #     
-├── tests                   #
+│   │       ├── index       # User endpoints
+│   │       └── schema      # User schema definitions
+│   ├── spotify             # 
+│   │   └── index           # Spotify callback and user sign-in
+│   └── root                # Health-check
+├── tests                   # 
 │   └── routes              #
 │       ├── routes          #                 
 │       ├── dummyShows      #                     
-│       ├── helper          # Builds app for tests               
+│       ├── helper          # Builds server for tests               
 │       └── testdb          # Mock database               
-└── app                     # 
+└── app                     # Main server file
 ```
 
 ## Current Features 🔥
