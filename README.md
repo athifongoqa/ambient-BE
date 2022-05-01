@@ -1,5 +1,8 @@
 # Ambient NodeJS-Fastify
 
+![alt text](assets/ambient.svg)
+
+<br>
 🚀 Deployment: [https://ambient-niqfhm2phq-ey.a.run.app/](https://ambient-niqfhm2phq-ey.a.run.app/).
 
 ## Project Status 🚧
