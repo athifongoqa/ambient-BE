@@ -13,7 +13,12 @@ module.exports = async function (fastify, opts) {
       preValidation: [fastify.authenticate, fastify.isAdmin],
       handler: getAllAdmins
     });
-    
-    fastify.patch('/:username', {preValidation: [fastify.authenticate, fastify.isAdmin]}, updateMemberToAdmin);
-  };
+
+    fastify.route({
+      method: "PATCH",
+      url: "/:username",
+      preValidation: [fastify.authenticate, fastify.isAdmin],
+      handler: updateMemberToAdmin
+    });
+};
   
