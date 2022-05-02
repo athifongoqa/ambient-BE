@@ -2,9 +2,11 @@
 const path = require('path');
 const AutoLoad = require('fastify-autoload');
 const mongoose = require('mongoose');
+const boom = require('boom');
 
 module.exports = async function (fastify, opts) {
-  // Place here your custom code!
+  try {
+    // Place here your custom code!
   await mongoose.connect(process.env.MONGODB);
   fastify.after((err) => {
     // eslint-disable-next-line no-console
@@ -28,4 +30,7 @@ module.exports = async function (fastify, opts) {
     dir: path.join(__dirname, 'routes'),
     options: { ...opts },
   });
+  } catch (err) {
+    throw boom.boomify(err)
+  }
 };
