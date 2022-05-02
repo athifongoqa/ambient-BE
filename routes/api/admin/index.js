@@ -6,9 +6,14 @@ module.exports = async function (fastify, opts) {
     fastify.register(require('fastify-prettier'), {
       alwaysOn: true,
     });
-  
-    fastify.get('/', {preValidation: [fastify.authenticate, fastify.isAdmin]}, getAllAdmins);
 
+    fastify.route({
+      method: "GET",
+      url: "/",
+      preValidation: [fastify.authenticate, fastify.isAdmin],
+      handler: getAllAdmins
+    });
+    
     fastify.patch('/:username', {preValidation: [fastify.authenticate, fastify.isAdmin]}, updateMemberToAdmin);
   };
   
