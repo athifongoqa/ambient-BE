@@ -4,9 +4,6 @@ const boom = require('boom');
 
 let mongod;
 
-/**
- * Connect to the in-memory database.
- */
 module.exports.connect = async () => {
   try {
     await mongoose.disconnect();
@@ -23,9 +20,6 @@ module.exports.connect = async () => {
   }
 };
 
-/**
- * Drop database, close the connection and stop mongod.
- */
 module.exports.closeDatabase = async () => {
   try {
     if (mongod) {
@@ -38,9 +32,6 @@ module.exports.closeDatabase = async () => {
   }
 };
 
-/**
- * Remove all the data for all db collections.
- */
 module.exports.clearDatabase = async () => {
   try {
     if (mongod) {
