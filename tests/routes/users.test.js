@@ -17,17 +17,6 @@ function createDummyUser(username, displayName, email, avatar, role) {
   };
 }
 
-const userPayLoad = {
-  _id: expect.any(String),
-  username: 'dummyOne',
-  displayName: 'Dumb',
-  email: 'dummyMember123.dummy@code.berlin',
-  avatar: 'img.ip/464558.jpg',
-  role: 'member',
-  followers: [],
-  following: [],
-};
-
 adminUser = createDummyUser(
   'master',
   'master',
@@ -67,6 +56,17 @@ describe('E2E User endpoints', () => {
     'img.ip/464559.jpg',
     'member',
   );
+
+  const dummyMemberOnePayload = {
+    _id: expect.any(String),
+    username: 'dummyOne',
+    displayName: 'Dumb',
+    email: 'dummyMember123.dummy@code.berlin',
+    avatar: 'img.ip/464558.jpg',
+    role: 'member',
+    followers: [],
+    following: [],
+  };
   
   it('should POST a single user', async () => {    
     const { statusCode, body } = await request(app.server)
@@ -77,7 +77,7 @@ describe('E2E User endpoints', () => {
     expect(statusCode).toBe(200);
     console.log(body)
     expect(body).toBeInstanceOf(Object);
-    expect(body).toEqual(userPayLoad);
+    expect(body).toEqual(dummyMemberOnePayload);
   });
   
   it('should GET all users', async () => {
