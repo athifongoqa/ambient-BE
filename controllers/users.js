@@ -8,18 +8,19 @@ async function addNewUser(req, reply) {
       return { message: 'Please use a valid email address.' };
     }
 
+    let user;
     const foundUser = await User.findOne({username: req.body.username})
 
-    let user;
-    
     if (foundUser) {
       user = foundUser
-    } else {
+    } 
+
+    if (!foundUser) {
       const newUser = new User(req.body);
       user = await newUser.save();
     }
+    
     return user
-
   } catch (err) {
     throw boom.boomify(err);
   }
