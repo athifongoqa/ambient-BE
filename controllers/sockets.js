@@ -31,8 +31,13 @@ function disconnectSocket(reason) {
     console.log(reason, socket.rooms, socket.id)
 }
 
+function spotifyPlaybackUpdate ({playerState, showId}) {
+    console.log(showId)
+    socket.broadcast.to(showId).emit('playback-updated', playerState)
+}
+
 
 
 module.exports = {
-    userJoinRoom, callRoom, leaveRoom, disconnectSocket
+    userJoinRoom, callRoom, leaveRoom, disconnectSocket, spotifyPlaybackUpdate
 }

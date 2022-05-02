@@ -3,7 +3,8 @@ const {
   userJoinRoom, 
   callRoom, 
   leaveRoom,
-  disconnectSocket
+  disconnectSocket,
+  spotifyPlaybackUpdate
 } = require('../controllers/sockets')
 
 module.exports = fp(async function (fastify, opts) {
@@ -22,10 +23,7 @@ module.exports = fp(async function (fastify, opts) {
 
       socket.on('disconnect', disconnectSocket);
 
-      socket.on('playback-update', ({playerState, showId}) => {
-        console.log(showId)
-        socket.broadcast.to(showId).emit('playback-updated', playerState)
-      });
+      socket.on('playback-update', spotifyPlaybackUpdate);
 
       socket.on('playback-initial-sync', ({toUserId, playerState}) => {
         console.log(toUserId, playerState)
