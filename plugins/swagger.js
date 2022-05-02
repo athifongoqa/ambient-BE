@@ -22,6 +22,7 @@ module.exports = fp(async (fastify) => {
       tags: [
         { name: 'show', description: 'Show related end-points' },
         { name: 'user', description: 'User related end-points' },
+        { name: 'admin', description: 'Admin related end-points' },
       ],
     },
     uiConfig: {

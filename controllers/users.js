@@ -9,25 +9,30 @@ async function addNewUser(req, reply) {
     }
 
     const foundUser = await User.findOne({username: req.body.username})
-
     let user;
-    
+
     if (foundUser) {
       user = foundUser
-    } else {
+    } 
+
+    if (!foundUser) {
       const newUser = new User(req.body);
       user = await newUser.save();
     }
-    return user
 
+    return user
   } catch (err) {
     throw boom.boomify(err);
   }
 }
 
 async function getAllUsers(req, reply) {
-  const users = await User.find();
-  reply.send({ allUsers: users });
+  try {
+    const users = await User.find();
+    reply.send({ allUsers: users });
+  } catch (err) {
+    throw boom.boomify(err);
+  }
 }
 
 async function getSingleUser(req, reply) {
@@ -41,17 +46,25 @@ async function getSingleUser(req, reply) {
 }
 
 async function updateSingleUser(req, reply) {
-  const { id } = req.params;
-  const updatedUser = await User.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
-  reply.send({ updatedUser });
+  try {
+    const { id } = req.params;
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    reply.send({ updatedUser });
+  } catch (err) {
+    throw boom.boomify(err);
+  }
 }
 
 async function deleteSingleUser(req, reply) {
-  const { id } = req.params;
-  const deletedUser = await User.findByIdAndDelete(id);
-  reply.send({ message: `${deletedUser.id} has been deleted` });
+  try {
+    const { id } = req.params;
+    const deletedUser = await User.findByIdAndDelete(id);
+    reply.send({ message: `${deletedUser.id} has been deleted` });
+  } catch (err) {
+    throw boom.boomify(err);
+  }
 }
 
 module.exports = {

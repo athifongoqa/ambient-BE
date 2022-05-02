@@ -2,7 +2,7 @@
 name: Build, Push and Deploy NodeJS Image w/ Google Cloud Platform
 on:
   push:
-    branches: [ dev ]
+    branches: [ prod ]
 jobs:
   build-push-gcr:
     name: Build and Push Docker Image to GCP Artifact Registry
@@ -53,5 +53,5 @@ jobs:
           flags: --allow-unauthenticated
           credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
-      - name: Test Google Cloud Functions deployment 
+      - name: Test deployment 
         run: curl "${{ steps.deploy-run.outputs.url }}"

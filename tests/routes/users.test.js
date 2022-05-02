@@ -1,13 +1,11 @@
 const request = require('supertest');
-const { build } = require('../helper');
+const { build, getAccessToken } = require('../helper');
 const db = require('../testdb');
 const users = require('../../controllers/users');
-const Fastify = require('fastify')
-const jwt = require('../../plugins/jwt')
 const user = require('../../controllers/users')
 
 let app;
-let fastify;
+let adminAccessToken;
 
 function createDummyUser(username, displayName, email, avatar, role) {
   return {
@@ -19,18 +17,7 @@ function createDummyUser(username, displayName, email, avatar, role) {
   };
 }
 
-const userPayLoad = {
-  _id: expect.any(String),
-  username: 'dummyOne',
-  displayName: 'Dumb',
-  email: 'dummy123.dummy@code.berlin',
-  avatar: 'img.ip/464558.jpg',
-  role: 'member',
-  followers: [],
-  following: [],
-};
-
-admin_user = createDummyUser(
+adminUser = createDummyUser(
   'master',
   'master',
   'master.dummy@code.berlin',
@@ -41,12 +28,10 @@ admin_user = createDummyUser(
 beforeAll(async () => {
   app = await build();
   await db.connect();
+  adminAccessToken = await getAccessToken(adminUser);
 }, 15000);
 
 beforeEach(async () => {
-  fastify = Fastify()
-  fastify.register(jwt)
-  await fastify.ready()  
   await db.clearDatabase();
 });
 
@@ -55,120 +40,92 @@ afterAll(async () => {
   await db.closeDatabase();
 }, 30000);
 
-describe('E2E User endpoints', () => {
-  const dummy1 = createDummyUser(
+describe('User endpoint integration tests', () => {
+  const dummyMemberOne = createDummyUser(
     'dummyOne',
     'Dumb',
-    'dummy123.dummy@code.berlin',
+    'dummyMember123.dummy@code.berlin',
     'img.ip/464558.jpg',
     'member',
   );
 
-  const dummy2 = createDummyUser(
+  const dummyMemberTwo = createDummyUser(
     'dummyTwo',
     'Dumb Dumb',
-    'dummy1234.dummy@code.berlin',
+    'dummyMember1234.dummy@code.berlin',
     'img.ip/464559.jpg',
     'member',
   );
+
+  const dummyMemberOnePayload = {
+    _id: expect.any(String),
+    username: 'dummyOne',
+    displayName: 'Dumb',
+    email: 'dummyMember123.dummy@code.berlin',
+    avatar: 'img.ip/464558.jpg',
+    role: 'member',
+    followers: [],
+    following: [],
+  };
   
-  it('should POST a single user', async () => {
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-      return token
-    }).catch((err) => {
-      return err
-    })
-    
-    // When (Only 1 operation)
+  it('should POST a single user', async () => {    
     const { statusCode, body } = await request(app.server)
     .post('/api/users/')
-    .send(dummy1)
+    .send(dummyMemberOne)
     .set({ Authorization: `Bearer ${adminAccessToken}` });
     
-    // Then
     expect(statusCode).toBe(200);
     console.log(body)
     expect(body).toBeInstanceOf(Object);
-    expect(body).toEqual(userPayLoad);
+    expect(body).toEqual(dummyMemberOnePayload);
   });
   
   it('should GET all users', async () => {
-    // Given  
-    await users.addNewUser({body: dummy2})
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-      return token
-    }).catch((err) => {
-      return err
-    })
+    await users.addNewUser({body: dummyMemberOne})
+    await users.addNewUser({body: dummyMemberTwo})
 
-    // When
     const { body, statusCode } = await request(app.server)
     .get('/api/users/')
     .set({ Authorization: `Bearer ${adminAccessToken}` })
     
-    // Then
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
-    expect(body.allUsers[0]).toMatchObject(dummy2);
-    expect(body.allUsers[1]).toMatchObject(admin_user);
+    expect(body.allUsers[0]).toMatchObject(dummyMemberOne);
+    expect(body.allUsers[1]).toMatchObject(dummyMemberTwo);
   });
   
   it('should GET a single user', async () => {
-    // Given
-    await user.addNewUser({ body: dummy1 });
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-      return token
-    }).catch((err) => {
-      return err
-    })
+    await user.addNewUser({ body: dummyMemberOne });
     
-    // When
     const { body, statusCode } = await request(app.server)
-    .get(`/api/users/${dummy1.username}`)
+    .get(`/api/users/${dummyMemberOne.username}`)
     .set({ Authorization: `Bearer ${adminAccessToken}` })
     
-    // Then
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
     });
     
     it('should DELETE a single user', async () => {
-      // Given
-      const newUser = await user.addNewUser({ body: dummy2 });
-      const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-        return token
-      }).catch((err) => {
-        return err
-      })
+      const newUser = await user.addNewUser({ body: dummyMemberTwo });
 
-      // When
       const { body, statusCode } = await request(app.server)
       .delete(`/api/users/${newUser._id}`)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
       
-      // Then
       expect(statusCode).toBe(200);
       expect(body.message).toMatch(`${newUser._id} has been deleted`);
     
   });
   
   it('should UPDATE a single user', async () => {
-    // Given
-    const newUser = await user.addNewUser({ body: dummy2 });
+    const newUser = await user.addNewUser({ body: dummyMemberTwo });
     const newDisplayName = 'Ronald';
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
-      return token
-    }).catch((err) => {
-      return err
-    })
 
-    // When
     const { body, statusCode } = await request(app.server)
       .patch(`/api/users/${newUser._id}`)
       .send({ displayName: newDisplayName })
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
-    // Then
     expect(statusCode).toBe(200);
     expect(body.updatedUser.displayName).toMatch(newDisplayName);
   });
