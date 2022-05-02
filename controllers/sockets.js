@@ -36,8 +36,13 @@ function spotifyPlaybackUpdate ({playerState, showId}) {
     socket.broadcast.to(showId).emit('playback-updated', playerState)
 }
 
+function initialPlaybackSync({toUserId, playerState}) {
+    console.log(toUserId, playerState)
+    socket.broadcast.to(toUserId).emit('playback-updated', playerState)
+  }
+
 
 
 module.exports = {
-    userJoinRoom, callRoom, leaveRoom, disconnectSocket, spotifyPlaybackUpdate
+    userJoinRoom, callRoom, leaveRoom, disconnectSocket, spotifyPlaybackUpdate, initialPlaybackSync
 }

@@ -4,7 +4,8 @@ const {
   callRoom, 
   leaveRoom,
   disconnectSocket,
-  spotifyPlaybackUpdate
+  spotifyPlaybackUpdate,
+  initialPlaybackSync
 } = require('../controllers/sockets')
 
 module.exports = fp(async function (fastify, opts) {
@@ -25,10 +26,7 @@ module.exports = fp(async function (fastify, opts) {
 
       socket.on('playback-update', spotifyPlaybackUpdate);
 
-      socket.on('playback-initial-sync', ({toUserId, playerState}) => {
-        console.log(toUserId, playerState)
-        socket.broadcast.to(toUserId).emit('playback-updated', playerState)
-      });
+      socket.on('playback-initial-sync', initialPlaybackSync);
 
       socket.on('message-send', ({showId, message, user}, callback) => {
         console.log(`${user.displayName} says: ${message}`)
