@@ -79,13 +79,11 @@ describe('E2E User endpoints', () => {
       return err
     })
     
-    // When (Only 1 operation)
     const { statusCode, body } = await request(app.server)
     .post('/api/users/')
     .send(dummy1)
     .set({ Authorization: `Bearer ${adminAccessToken}` });
     
-    // Then
     expect(statusCode).toBe(200);
     console.log(body)
     expect(body).toBeInstanceOf(Object);
@@ -93,7 +91,6 @@ describe('E2E User endpoints', () => {
   });
   
   it('should GET all users', async () => {
-    // Given  
     await users.addNewUser({body: dummy2})
     const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
       return token
@@ -101,12 +98,10 @@ describe('E2E User endpoints', () => {
       return err
     })
 
-    // When
     const { body, statusCode } = await request(app.server)
     .get('/api/users/')
     .set({ Authorization: `Bearer ${adminAccessToken}` })
     
-    // Then
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
     expect(body.allUsers[0]).toMatchObject(dummy2);
@@ -114,7 +109,6 @@ describe('E2E User endpoints', () => {
   });
   
   it('should GET a single user', async () => {
-    // Given
     await user.addNewUser({ body: dummy1 });
     const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
       return token
@@ -122,18 +116,15 @@ describe('E2E User endpoints', () => {
       return err
     })
     
-    // When
     const { body, statusCode } = await request(app.server)
     .get(`/api/users/${dummy1.username}`)
     .set({ Authorization: `Bearer ${adminAccessToken}` })
     
-    // Then
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
     });
     
     it('should DELETE a single user', async () => {
-      // Given
       const newUser = await user.addNewUser({ body: dummy2 });
       const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
         return token
@@ -141,19 +132,16 @@ describe('E2E User endpoints', () => {
         return err
       })
 
-      // When
       const { body, statusCode } = await request(app.server)
       .delete(`/api/users/${newUser._id}`)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
       
-      // Then
       expect(statusCode).toBe(200);
       expect(body.message).toMatch(`${newUser._id} has been deleted`);
     
   });
   
   it('should UPDATE a single user', async () => {
-    // Given
     const newUser = await user.addNewUser({ body: dummy2 });
     const newDisplayName = 'Ronald';
     const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
@@ -162,13 +150,11 @@ describe('E2E User endpoints', () => {
       return err
     })
 
-    // When
     const { body, statusCode } = await request(app.server)
       .patch(`/api/users/${newUser._id}`)
       .send({ displayName: newDisplayName })
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
-    // Then
     expect(statusCode).toBe(200);
     expect(body.updatedUser.displayName).toMatch(newDisplayName);
   });
