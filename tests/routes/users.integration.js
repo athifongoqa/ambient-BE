@@ -40,7 +40,7 @@ afterAll(async () => {
   await db.closeDatabase();
 }, 30000);
 
-describe('E2E User endpoints', () => {
+describe('User endpoint integration tests', () => {
   const dummyMemberOne = createDummyUser(
     'dummyOne',
     'Dumb',

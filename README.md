@@ -43,27 +43,30 @@ Here is a description of the content of each folder in the directory:
 ├── models                  # Show & User models & schemas
 │   ├── shows.model             
 │   └── users.model           
-├── plugins                 
-│   ├── formbody            # Formbody parser  
+├── plugins 
 │   ├── jwt                 # JWT-related decorators
 │   ├── sockets             # Fastify-socket.io events and connection 
 │   ├── spotify             # Spotify OAuth support 
 │   └── swagger             # Documentation support using Swagger          
-├── routes                  #  
-│   ├── api                 #
-│   │   ├── shows           #
+├── routes                    
+│   ├── api                 
+│   │   ├── shows           
 │   │   │   ├── index       # Show endpoints
 │   │   │   └── schema      # Show schema definitions
-│   │   └── users           #
+│   │   └── users           
 │   │       ├── index       # User endpoints
 │   │       └── schema      # User schema definitions
-│   ├── spotify             # 
+│   ├── spotify              
 │   │   └── index           # Spotify callback and user sign-in
 │   └── root                # Health-check
-├── tests                   # 
-│   └── routes              #
-│       ├── routes          #                 
-│       ├── dummyShows      #                     
+├── tests                   # Unit & integration tests
+│   └── routes              
+│       ├── routes                           
+│       │   ├── admin.integration                   
+│       │   ├── shows.integration                   
+│       │   ├── shows.test                   
+│       │   ├── users.integration                   
+│       ├── dummyShows      # Mock shows                     
 │       ├── helper          # Builds server for tests               
 │       └── testdb          # Mock database               
 └── app                     # Main server file
@@ -77,7 +80,7 @@ The features currently available in this app include:
 - Secure authentication and authorisation with JSON Web Tokens
 - API for users and shows endpoints
 - Websockets for audio streaming and chat functionality
-- Unit, Integration, and End-to-End tests
+- Unit & Integration tests
 - API documnetation using Swagger
 - Deployed using Google Cloud Platform's Cloud Run
 
