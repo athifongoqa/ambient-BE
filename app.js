@@ -10,6 +10,9 @@ module.exports = async function (fastify, opts) {
     fastify.register(require('@fastify/cors'))
     fastify.register(require('@fastify/helmet'))
     fastify.register(require('fastify-formbody'))
+    fastify.register(require('fastify-sensible'), {
+      errorHandler: false
+    })
 
     fastify.register(AutoLoad, {
       dir: path.join(__dirname, 'plugins'),
