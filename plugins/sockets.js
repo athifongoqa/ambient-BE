@@ -1,5 +1,9 @@
 const fp = require('fastify-plugin')
-const { userJoinRoom } = require('../controllers/sockets')
+const { 
+  userJoinRoom, 
+  callRoom, 
+  leaveRoom 
+} = require('../controllers/sockets')
 
 module.exports = fp(async function (fastify, opts) {
   fastify.register(require('fastify-socket.io'))
@@ -8,28 +12,12 @@ module.exports = fp(async function (fastify, opts) {
     if (err) throw err
   
     fastify.io.on('connection', (socket) => { 
-          console.log('A user just connected');
-  
-      const get_participant_with_socket = (participant) => {
-        return {
-          ...participant,
-          socketId: socket.id,
-          roomId: participant.activeShow._id
-        }
-      }
-    
+
       socket.on('user-join-show', userJoinRoom);
 
-      socket.on('call', ({participant, socketId}) => {
-        console.log('calling', socketId);
-        socket.broadcast.to(socketId).emit('called', get_participant_with_socket(participant))
-      });
+      socket.on('call', callRoom);
 
-      socket.on('leave-show', (room) => {
-        socket.leave(room); 
-        console.log(socket.id, "left", room)
-        socket.broadcast.to(room).emit('user-left-show', socket.id)
-      });
+      socket.on('leave-show', leaveRoom);
 
       socket.on('disconnect', (reason) => {
         console.log('user disconnected')
