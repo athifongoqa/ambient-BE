@@ -39,10 +39,20 @@ function spotifyPlaybackUpdate ({playerState, showId}) {
 function initialPlaybackSync({toUserId, playerState}) {
     console.log(toUserId, playerState)
     socket.broadcast.to(toUserId).emit('playback-updated', playerState)
-  }
+}
 
+function messageSend({showId, message, user}, callback) {
+    console.log(`${user.displayName} says: ${message}`)
+    callback({message, user})
+    socket.to(showId).emit('message-receive', {message, user})
+}
+
+function toggleMute(showId, peerId, isMuted) {
+    console.log('mute event');
+    socket.broadcast.to(showId).emit('toggle-mute', peerId, isMuted);
+}
 
 
 module.exports = {
-    userJoinRoom, callRoom, leaveRoom, disconnectSocket, spotifyPlaybackUpdate, initialPlaybackSync
+    userJoinRoom, callRoom, leaveRoom, disconnectSocket, spotifyPlaybackUpdate, initialPlaybackSync, messageSend, toggleMute
 }

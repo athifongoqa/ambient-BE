@@ -38,7 +38,9 @@ Here is a description of the content of each folder in the directory:
 │   └── workflows           # Configuration folder containing yml files for GitHub Actions
 │       └── gcp             # yml file for handling deployment jobs
 ├── controllers             # Handler functions
+│   ├── admin                
 │   ├── shows                
+│   ├── sockets                
 │   └── users                         
 ├── models                  # Show & User models & schemas
 │   ├── shows.model             
