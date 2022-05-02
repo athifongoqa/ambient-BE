@@ -7,8 +7,9 @@ module.exports = async function (fastify, opts) {
   try {
     await mongoose.connect(process.env.MONGODB);
 
-    fastify.register(require('@fastify/cors'))
-    fastify.register(require('@fastify/helmet'))
+    // disabled due to conflict with Swagger
+    // fastify.register(require('@fastify/cors'))
+    // fastify.register(require('@fastify/helmet'))
     fastify.register(require('fastify-formbody'))
     fastify.register(require('fastify-sensible'), {
       errorHandler: false
