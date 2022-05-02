@@ -1,5 +1,3 @@
-const User = require('../../../models/user.model');
-const boom = require('boom');
 const { getAllAdmins, updateMemberToAdmin } = require('../../../controllers/admin')
 
 module.exports = async function (fastify, opts) {
