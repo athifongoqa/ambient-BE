@@ -23,14 +23,14 @@ const userPayLoad = {
   _id: expect.any(String),
   username: 'dummyOne',
   displayName: 'Dumb',
-  email: 'dummy123.dummy@code.berlin',
+  email: 'dummyMemberOne23.dummy@code.berlin',
   avatar: 'img.ip/464558.jpg',
   role: 'member',
   followers: [],
   following: [],
 };
 
-admin_user = createDummyUser(
+adminUser = createDummyUser(
   'master',
   'master',
   'master.dummy@code.berlin',
@@ -56,24 +56,24 @@ afterAll(async () => {
 }, 30000);
 
 describe('E2E User endpoints', () => {
-  const dummy1 = createDummyUser(
+  const dummyMemberOne = createDummyUser(
     'dummyOne',
     'Dumb',
-    'dummy123.dummy@code.berlin',
+    'dummyMember123.dummy@code.berlin',
     'img.ip/464558.jpg',
     'member',
   );
 
-  const dummy2 = createDummyUser(
+  const dummyMemberTwo = createDummyUser(
     'dummyTwo',
     'Dumb Dumb',
-    'dummy1234.dummy@code.berlin',
+    'dummyMember1234.dummy@code.berlin',
     'img.ip/464559.jpg',
     'member',
   );
   
   it('should POST a single user', async () => {
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+    const adminAccessToken = await fastify.signIn({body: adminUser}).then(async (token) => {
       return token
     }).catch((err) => {
       return err
@@ -81,7 +81,7 @@ describe('E2E User endpoints', () => {
     
     const { statusCode, body } = await request(app.server)
     .post('/api/users/')
-    .send(dummy1)
+    .send(dummyMemberOne)
     .set({ Authorization: `Bearer ${adminAccessToken}` });
     
     expect(statusCode).toBe(200);
@@ -91,8 +91,8 @@ describe('E2E User endpoints', () => {
   });
   
   it('should GET all users', async () => {
-    await users.addNewUser({body: dummy2})
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+    await users.addNewUser({body: dummyMemberTwo})
+    const adminAccessToken = await fastify.signIn({body: adminUser}).then(async (token) => {
       return token
     }).catch((err) => {
       return err
@@ -104,20 +104,20 @@ describe('E2E User endpoints', () => {
     
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
-    expect(body.allUsers[0]).toMatchObject(dummy2);
-    expect(body.allUsers[1]).toMatchObject(admin_user);
+    expect(body.allUsers[0]).toMatchObject(dummyMemberTwo);
+    expect(body.allUsers[1]).toMatchObject(adminUser);
   });
   
   it('should GET a single user', async () => {
-    await user.addNewUser({ body: dummy1 });
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+    await user.addNewUser({ body: dummyMemberOne });
+    const adminAccessToken = await fastify.signIn({body: adminUser}).then(async (token) => {
       return token
     }).catch((err) => {
       return err
     })
     
     const { body, statusCode } = await request(app.server)
-    .get(`/api/users/${dummy1.username}`)
+    .get(`/api/users/${dummyMemberOne.username}`)
     .set({ Authorization: `Bearer ${adminAccessToken}` })
     
     expect(statusCode).toBe(200);
@@ -125,8 +125,8 @@ describe('E2E User endpoints', () => {
     });
     
     it('should DELETE a single user', async () => {
-      const newUser = await user.addNewUser({ body: dummy2 });
-      const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+      const newUser = await user.addNewUser({ body: dummyMemberTwo });
+      const adminAccessToken = await fastify.signIn({body: adminUser}).then(async (token) => {
         return token
       }).catch((err) => {
         return err
@@ -142,9 +142,9 @@ describe('E2E User endpoints', () => {
   });
   
   it('should UPDATE a single user', async () => {
-    const newUser = await user.addNewUser({ body: dummy2 });
+    const newUser = await user.addNewUser({ body: dummyMemberTwo });
     const newDisplayName = 'Ronald';
-    const adminAccessToken = await fastify.signIn({body: admin_user}).then(async (token) => {
+    const adminAccessToken = await fastify.signIn({body: adminUser}).then(async (token) => {
       return token
     }).catch((err) => {
       return err
