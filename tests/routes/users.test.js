@@ -90,7 +90,6 @@ describe('E2E User endpoints', () => {
     
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
-    console.log(body)
     expect(body.allUsers[0]).toMatchObject(dummyMemberOne);
     expect(body.allUsers[1]).toMatchObject(dummyMemberTwo);
   });

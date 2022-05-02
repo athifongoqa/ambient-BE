@@ -6,9 +6,6 @@ const boom = require('boom');
 module.exports = async function (fastify, opts) {
   try {
     await mongoose.connect(process.env.MONGODB);
-    fastify.after((err) => {
-      err ? console.log(err) : console.log('Database is connected.');
-    });
 
     fastify.register(require('@fastify/cors'))
     fastify.register(require('@fastify/helmet'))
