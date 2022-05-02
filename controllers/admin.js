@@ -6,10 +6,20 @@ async function getAllAdmins(req, reply) {
       const adminUsers = await User.find({ role: 'admin' });
       reply.send({ allAdminUsers: adminUsers });
     } catch (err) {
-      throw boom.boomify(err);
+        throw boom.boomify(err);
     }
-  }
+}
+
+async function updateMemberToAdmin(req, reply) {
+    try {
+        const { username } = req.params;
+        const newAdmin = await User.updateOne({username: username}, {role: 'admin'});
+        reply.send({message: `${username} has been updated to admin.`});
+    } catch (err) {
+        throw boom.boomify(err);
+    }
+}
 
 module.exports = {
-    getAllAdmins
+    getAllAdmins, updateMemberToAdmin
 }
