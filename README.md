@@ -24,7 +24,7 @@ To install this project and run it locally, please follow the following steps:
 
 ## Testing 🧪
 
-This app uses Jest, and Mocha for Unit, Integration, and End-to-End tests.
+This app uses Jest, and Mocha for Unit & Integration tests.
 
 You can run the Unit and Integration tests by simply running `npm run test`.
 
