@@ -2,7 +2,8 @@ const fp = require('fastify-plugin')
 const { 
   userJoinRoom, 
   callRoom, 
-  leaveRoom 
+  leaveRoom,
+  disconnectSocket
 } = require('../controllers/sockets')
 
 module.exports = fp(async function (fastify, opts) {
@@ -19,10 +20,7 @@ module.exports = fp(async function (fastify, opts) {
 
       socket.on('leave-show', leaveRoom);
 
-      socket.on('disconnect', (reason) => {
-        console.log('user disconnected')
-        console.log(reason, socket.rooms, socket.id)
-      });
+      socket.on('disconnect', disconnectSocket);
 
       socket.on('playback-update', ({playerState, showId}) => {
         console.log(showId)

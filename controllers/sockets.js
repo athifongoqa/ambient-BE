@@ -24,10 +24,15 @@ function leaveRoom(room){
     socket.leave(room); 
     console.log(socket.id, "left", room)
     socket.broadcast.to(room).emit('user-left-show', socket.id)
-  }
+}
+
+function disconnectSocket(reason) {
+    console.log('user disconnected')
+    console.log(reason, socket.rooms, socket.id)
+}
 
 
 
 module.exports = {
-    userJoinRoom, callRoom, leaveRoom
+    userJoinRoom, callRoom, leaveRoom, disconnectSocket
 }
