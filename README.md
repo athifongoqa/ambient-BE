@@ -21,6 +21,16 @@ To install this project and run it locally, please follow the following steps:
 4. Install the npm packages by running `npm install `;
 5. Either run the development server with `npm run dev` or run the app for better performances by running `npm run start`;
 6. Visit http://0.0.0.0:3000.
+7. To login, visit http://0.0.0.0:3000/login/spotify
+
+## .env
+```
+CLIENT_ID= # Spotify client id - visit: https://developer.spotify.com/dashboard and create a new application
+CLIENT_SECRET= # Spotify client secret - visit: https://developer.spotify.com/dashboard and create a new application
+MONGODB= # MongoDB URI
+FASTIFY_ADDRESS=0.0.0.0
+JWT_SECRET= # your secret
+```
 
 ## Testing 🧪
 
