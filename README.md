@@ -18,7 +18,7 @@ Prerequisites: `nodejs v16.13.0` or newer and `npm 8.3.1` or newer.
 To install this project and run it locally, please follow the following steps:
 
 1. Open the terminal and run `git clone https://github.com/athifongoqa/ambient-BE.git`;
-2. Navigate to the repository (`cd ambient-BE`);
+2. Navigate to the repository (`cd ambient-BE`) and create a .env file as specified below;
 3. Navigate to the branch you are interested in (`git checkout BRANCH_NAME`);
 4. Install the npm packages by running `npm install `;
 5. Either run the development server with `npm run dev` or run the app for better performances by running `npm run start`;
