@@ -27,8 +27,8 @@ To install this project and run it locally, please follow the following steps:
 
 ## .env
 ```
-CLIENT_ID= # Spotify client id - visit: https://developer.spotify.com/dashboard and create a new application
-CLIENT_SECRET= # Spotify client secret - visit: https://developer.spotify.com/dashboard and create a new application
+CLIENT_ID= # Spotify client id - visit: https://developer.spotify.com/dashboard and create a new application & register http://0.0.0.0:3000/spotify/login/spotify/callback as the redirect URI 
+CLIENT_SECRET= # Spotify client secret - visit: https://developer.spotify.com/dashboard and create a new application & register http://0.0.0.0:3000/spotify/login/spotify/callback as the redirect URI 
 MONGODB= # MongoDB URI
 FASTIFY_ADDRESS=0.0.0.0
 JWT_SECRET= # your secret
