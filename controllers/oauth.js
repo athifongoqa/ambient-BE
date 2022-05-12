@@ -1,35 +1,23 @@
+/* eslint-disable no-undef */
 const axios = require('axios');
 
-function formatUser(username, displayName, email, avatar) {
-    return {
-      username,
-      displayName,
-      email,
-      avatar,
-    };
-  }
+async function getSpotifyUser(accessToken) {
+  const { data } = await axios.get('https://api.spotify.com/v1/me', {
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-async function returnAllTokens(req, reply) {
-    const token = await fastify.Spotify.getAccessTokenFromAuthorizationCodeFlow(req);
+  const user = {
+    username: data.id,
+    displayName: data.display_name,
+    email: data.email,
+    avatar: data.images[0].url,
+  };
 
-    const userData = await axios.get('https://api.spotify.com/v1/me', {
-      headers: {
-        authorization: `${token.token_type} ${token.access_token}`
-      }
-    })
-
-    const user = formatUser(
-      userData.data.id,
-      userData.data.display_name,
-      userData.data.email,
-      userData.data.images[0],
-    )
-    
-    const userJWT = await fastify.signIn({body: user})
-
-    reply.send({ SpotifyAccessToken: token.access_token, SpotifyRefreshToken: token.refresh_token, internalJWT: userJWT });
+  return user;
 }
 
 module.exports = {
-    returnAllTokens
-}
+  getSpotifyUser,
+};
