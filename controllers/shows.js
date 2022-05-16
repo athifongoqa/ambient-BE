@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
 const Show = require('../models/show.model');
 
 const getShows = async (req, reply) => {
