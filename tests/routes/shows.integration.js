@@ -11,12 +11,13 @@ describe('shows integration tests', () => {
   let app;
   let adminAccessToken;
   const baseApiUrl = '/api/shows';
-  let authHeader = { Authorization: `Bearer ${adminAccessToken}` };
+  let authHeader;
 
   before(async () => {
     app = await build();
     await db.connect();
     adminAccessToken = await getAccessToken(adminUser);
+    authHeader = { Authorization: `Bearer ${adminAccessToken}` };
   });
 
   beforeEach(async () => {
