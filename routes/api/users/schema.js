@@ -9,11 +9,11 @@ const returnedUser = {
     role: { type: 'string' },
     following: {
       type: 'array',
-      items: { type: 'string', format: 'uuid' },
+      items: { type: 'string', pattern: '^[0-9a-f]{24}$' },
     },
     followers: {
       type: 'array',
-      items: { type: 'string', format: 'uuid' },
+      items: { type: 'string', pattern: '^[0-9a-f]{24}$' },
     },
   },
 };
