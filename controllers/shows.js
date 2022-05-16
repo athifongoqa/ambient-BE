@@ -2,7 +2,7 @@ const Show = require('../models/show.model');
 
 const getShows = async (req, reply) => {
   const shows = await Show.find();
-  shows.length != 0 ? reply.send(shows) : reply.code(204).send();
+  shows.length ? reply.send(shows) : reply.code(204).send();
 };
 
 const getShow = async function (req, reply) {
