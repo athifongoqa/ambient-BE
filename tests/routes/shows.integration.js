@@ -10,6 +10,7 @@ const { showInput, adminUser } = require('../dummyShows');
 describe('shows integration tests', () => {
   let app;
   let adminAccessToken;
+  const baseApiUrl = '/api/shows';
 
   before(async () => {
     app = await build();
@@ -28,7 +29,7 @@ describe('shows integration tests', () => {
 
   it('Get all shows when there is none', async () => {
     const { statusCode, body } = await request(app.server)
-      .get('/api/shows/')
+      .get(baseApiUrl)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
     assert.equal(statusCode, 200);
@@ -40,7 +41,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .get('/api/shows/')
+      .get(baseApiUrl)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
     assert.equal(statusCode, 200);
@@ -53,7 +54,7 @@ describe('shows integration tests', () => {
     const returnedShow = await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .get(`/api/shows/${returnedShow._id}`)
+      .get(`${baseApiUrl}/${returnedShow._id}`)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
     assert.equal(statusCode, 200);
@@ -65,7 +66,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .get('/api/shows/1234567890abcdef12345678')
+      .get(`${baseApiUrl}/1234567890abcdef12345678`)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
     assert.equal(statusCode, 404);
@@ -74,7 +75,7 @@ describe('shows integration tests', () => {
 
   it('Get a single show with invalid length id', async () => {
     const { statusCode, body } = await request(app.server)
-      .get('/api/shows/123')
+      .get(`${baseApiUrl}/123`)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
     assert.equal(statusCode, 500);
@@ -83,7 +84,7 @@ describe('shows integration tests', () => {
 
   it('Create a show', async () => {
     const { statusCode, body } = await request(app.server)
-      .post('/api/shows/')
+      .post(baseApiUrl)
       .send(showInput)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
@@ -96,7 +97,7 @@ describe('shows integration tests', () => {
     const returnedShow = await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .patch(`/api/shows/${returnedShow._id}`)
+      .patch(`${baseApiUrl}/${returnedShow._id}`)
       .send({ name: 'Updated Show Name' })
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
@@ -110,7 +111,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .patch('/api/shows/1234567890abcdef12345678')
+      .patch(`${baseApiUrl}/1234567890abcdef12345678`)
       .send({ name: 'Updated Show Name' })
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
@@ -120,7 +121,7 @@ describe('shows integration tests', () => {
 
   it('Update a show with invalid length id', async () => {
     const { statusCode, body } = await request(app.server)
-      .patch('/api/shows/123')
+      .patch(`${baseApiUrl}/123`)
       .send({ name: 'Updated Show Name' })
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
@@ -133,7 +134,7 @@ describe('shows integration tests', () => {
     const returnedShow = await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .delete(`/api/shows/${returnedShow._id}`)
+      .delete(`${baseApiUrl}/${returnedShow._id}`)
       .send()
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
