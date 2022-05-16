@@ -12,6 +12,8 @@ describe('shows integration tests', () => {
   let adminAccessToken;
   const baseApiUrl = '/api/shows';
   let authHeader;
+  const validId = '1234567890abcdef12345678';
+  const invalidId = '123';
 
   before(async () => {
     app = await build();
@@ -68,7 +70,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .get(`${baseApiUrl}/1234567890abcdef12345678`)
+      .get(`${baseApiUrl}/${validId}`)
       .set(authHeader);
 
     assert.equal(statusCode, 404);
@@ -77,7 +79,7 @@ describe('shows integration tests', () => {
 
   it('Get a single show with invalid length id', async () => {
     const { statusCode, body } = await request(app.server)
-      .get(`${baseApiUrl}/123`)
+      .get(`${baseApiUrl}/${invalidId}`)
       .set(authHeader);
 
     assert.equal(statusCode, 500);
@@ -113,7 +115,7 @@ describe('shows integration tests', () => {
     await show.save();
 
     const { statusCode, body } = await request(app.server)
-      .patch(`${baseApiUrl}/1234567890abcdef12345678`)
+      .patch(`${baseApiUrl}/${validId}`)
       .send({ name: 'Updated Show Name' })
       .set(authHeader);
 
@@ -123,7 +125,7 @@ describe('shows integration tests', () => {
 
   it('Update a show with invalid length id', async () => {
     const { statusCode, body } = await request(app.server)
-      .patch(`${baseApiUrl}/123`)
+      .patch(`${baseApiUrl}/${invalidId}`)
       .send({ name: 'Updated Show Name' })
       .set(authHeader);
 
