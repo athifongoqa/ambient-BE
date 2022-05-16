@@ -14,6 +14,7 @@ describe('shows integration tests', () => {
   let authHeader;
   const validId = '1234567890abcdef12345678';
   const invalidId = '123';
+  let show;
 
   before(async () => {
     app = await build();
@@ -41,7 +42,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get all shows when there are some', async () => {
-    const show = new Show(showInput);
+    show = new Show(showInput);
     await show.save();
 
     const { statusCode, body } = await request(app.server)
@@ -54,7 +55,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show', async () => {
-    const show = new Show(showInput);
+    show = new Show(showInput);
     const returnedShow = await show.save();
 
     const { statusCode, body } = await request(app.server)
@@ -66,7 +67,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show with non existing id', async () => {
-    const show = new Show(showInput);
+    show = new Show(showInput);
     await show.save();
 
     const { statusCode, body } = await request(app.server)
@@ -97,7 +98,7 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show', async () => {
-    const show = new Show(showInput);
+    show = new Show(showInput);
     const returnedShow = await show.save();
 
     const { statusCode, body } = await request(app.server)
@@ -111,7 +112,7 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show with non existing id', async () => {
-    const show = new Show(showInput);
+    show = new Show(showInput);
     await show.save();
 
     const { statusCode, body } = await request(app.server)
@@ -134,7 +135,7 @@ describe('shows integration tests', () => {
   });
 
   it('Delete a show', async () => {
-    const show = new Show(showInput);
+    show = new Show(showInput);
     const returnedShow = await show.save();
 
     const { statusCode, body } = await request(app.server)
