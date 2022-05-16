@@ -3,9 +3,8 @@
 const request = require('supertest');
 const assert = require('assert');
 const db = require('../testdb');
-const Show = require('../../models/show.model');
-const { build, getAccessToken } = require('../helper');
-const { showInput, adminUser } = require('../dummyShows');
+const { build, getAccessToken, addShowToDb } = require('../helper');
+const { adminUser, showInput } = require('../dummyShows');
 
 describe('shows integration tests', () => {
   let app;
@@ -14,7 +13,6 @@ describe('shows integration tests', () => {
   let authHeader;
   const validId = '1234567890abcdef12345678';
   const invalidId = '123';
-  let show;
 
   before(async () => {
     app = await build();
@@ -42,8 +40,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get all shows when there are some', async () => {
-    show = new Show(showInput);
-    await show.save();
+    await addShowToDb();
 
     const { statusCode, body } = await request(app.server)
       .get(baseApiUrl)
@@ -55,8 +52,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show', async () => {
-    show = new Show(showInput);
-    const returnedShow = await show.save();
+    const returnedShow = await addShowToDb();
 
     const { statusCode, body } = await request(app.server)
       .get(`${baseApiUrl}/${returnedShow._id}`)
@@ -67,8 +63,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show with non existing id', async () => {
-    show = new Show(showInput);
-    await show.save();
+    await addShowToDb();
 
     const { statusCode, body } = await request(app.server)
       .get(`${baseApiUrl}/${validId}`)
@@ -79,6 +74,8 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show with invalid length id', async () => {
+    await addShowToDb();
+
     const { statusCode, body } = await request(app.server)
       .get(`${baseApiUrl}/${invalidId}`)
       .set(authHeader);
@@ -98,8 +95,7 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show', async () => {
-    show = new Show(showInput);
-    const returnedShow = await show.save();
+    const returnedShow = await addShowToDb();
 
     const { statusCode, body } = await request(app.server)
       .patch(`${baseApiUrl}/${returnedShow._id}`)
@@ -112,8 +108,7 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show with non existing id', async () => {
-    show = new Show(showInput);
-    await show.save();
+    await addShowToDb();
 
     const { statusCode, body } = await request(app.server)
       .patch(`${baseApiUrl}/${validId}`)
@@ -125,6 +120,8 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show with invalid length id', async () => {
+    await addShowToDb();
+
     const { statusCode, body } = await request(app.server)
       .patch(`${baseApiUrl}/${invalidId}`)
       .send({ name: 'Updated Show Name' })
@@ -135,8 +132,7 @@ describe('shows integration tests', () => {
   });
 
   it('Delete a show', async () => {
-    show = new Show(showInput);
-    const returnedShow = await show.save();
+    const returnedShow = await addShowToDb();
 
     const { statusCode, body } = await request(app.server)
       .delete(`${baseApiUrl}/${returnedShow._id}`)
