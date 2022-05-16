@@ -36,8 +36,8 @@ describe('shows integration tests', () => {
       .get(baseApiUrl)
       .set(authHeader);
 
-    assert.equal(statusCode, 200);
-    assert.equal(body.length, 0);
+    assert.equal(statusCode, 204);
+    assert.deepEqual(body, {});
   });
 
   it('Get all shows when there are some', async () => {

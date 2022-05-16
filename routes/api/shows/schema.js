@@ -35,6 +35,10 @@ const getShowsOpts = {
       type: 'array',
       items: returnedShow,
     },
+    204: {
+      description: 'Get all shows',
+      type: 'object',
+    },
     404: {
       description: 'No shows found',
       type: 'object',
