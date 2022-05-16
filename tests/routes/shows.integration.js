@@ -11,6 +11,7 @@ describe('shows integration tests', () => {
   let app;
   let adminAccessToken;
   const baseApiUrl = '/api/shows';
+  let authHeader = { Authorization: `Bearer ${adminAccessToken}` };
 
   before(async () => {
     app = await build();
@@ -30,7 +31,7 @@ describe('shows integration tests', () => {
   it('Get all shows when there is none', async () => {
     const { statusCode, body } = await request(app.server)
       .get(baseApiUrl)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 200);
     assert.equal(body.length, 0);
@@ -42,7 +43,7 @@ describe('shows integration tests', () => {
 
     const { statusCode, body } = await request(app.server)
       .get(baseApiUrl)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 200);
     assert.equal(body.length, 1);
@@ -55,7 +56,7 @@ describe('shows integration tests', () => {
 
     const { statusCode, body } = await request(app.server)
       .get(`${baseApiUrl}/${returnedShow._id}`)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 200);
     assert.equal(body.name, showInput.name);
@@ -67,7 +68,7 @@ describe('shows integration tests', () => {
 
     const { statusCode, body } = await request(app.server)
       .get(`${baseApiUrl}/1234567890abcdef12345678`)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 404);
     assert.equal(body.message, 'Show not found');
@@ -76,7 +77,7 @@ describe('shows integration tests', () => {
   it('Get a single show with invalid length id', async () => {
     const { statusCode, body } = await request(app.server)
       .get(`${baseApiUrl}/123`)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
@@ -86,7 +87,7 @@ describe('shows integration tests', () => {
     const { statusCode, body } = await request(app.server)
       .post(baseApiUrl)
       .send(showInput)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 201);
     assert.equal(body.name, showInput.name);
@@ -99,7 +100,7 @@ describe('shows integration tests', () => {
     const { statusCode, body } = await request(app.server)
       .patch(`${baseApiUrl}/${returnedShow._id}`)
       .send({ name: 'Updated Show Name' })
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 200);
     assert.equal(body.name, 'Updated Show Name');
@@ -113,7 +114,7 @@ describe('shows integration tests', () => {
     const { statusCode, body } = await request(app.server)
       .patch(`${baseApiUrl}/1234567890abcdef12345678`)
       .send({ name: 'Updated Show Name' })
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 404);
     assert.equal(body.message, 'Show not found');
@@ -123,7 +124,7 @@ describe('shows integration tests', () => {
     const { statusCode, body } = await request(app.server)
       .patch(`${baseApiUrl}/123`)
       .send({ name: 'Updated Show Name' })
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
@@ -136,7 +137,7 @@ describe('shows integration tests', () => {
     const { statusCode, body } = await request(app.server)
       .delete(`${baseApiUrl}/${returnedShow._id}`)
       .send()
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+      .set(authHeader);
 
     assert.equal(statusCode, 200);
     assert.equal(body.message, `Show id ${returnedShow._id} deleted`);
