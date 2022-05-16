@@ -9,10 +9,28 @@ const { adminUser, showInput } = require('../dummyShows');
 describe('shows integration tests', () => {
   let app;
   let adminAccessToken;
-  const baseApiUrl = '/api/shows';
+  const baseApiUrl = '/api/shows/';
   let authHeader;
   const validId = '1234567890abcdef12345678';
   const invalidId = '123';
+
+  const authRequest = {
+    get: (url) =>
+      request(app.server)
+        .get(baseApiUrl + url)
+        .set(authHeader),
+    post: (body) =>
+      request(app.server).post(baseApiUrl).set(authHeader).send(body),
+    patch: (url, body) =>
+      request(app.server)
+        .patch(baseApiUrl + url)
+        .set(authHeader)
+        .send(body),
+    delete: (url) =>
+      request(app.server)
+        .delete(baseApiUrl + url)
+        .set(authHeader),
+  };
 
   before(async () => {
     app = await build();
@@ -31,9 +49,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get all shows when there is none', async () => {
-    const { statusCode, body } = await request(app.server)
-      .get(baseApiUrl)
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.get('');
 
     assert.equal(statusCode, 204);
     assert.deepEqual(body, {});
@@ -42,9 +58,7 @@ describe('shows integration tests', () => {
   it('Get all shows when there are some', async () => {
     await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .get(baseApiUrl)
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.get('');
 
     assert.equal(statusCode, 200);
     assert.equal(body.length, 1);
@@ -54,9 +68,7 @@ describe('shows integration tests', () => {
   it('Get a single show', async () => {
     const returnedShow = await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .get(`${baseApiUrl}/${returnedShow._id}`)
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.get(returnedShow._id);
 
     assert.equal(statusCode, 200);
     assert.equal(body.name, showInput.name);
@@ -65,9 +77,7 @@ describe('shows integration tests', () => {
   it('Get a single show with non existing id', async () => {
     await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .get(`${baseApiUrl}/${validId}`)
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.get(validId);
 
     assert.equal(statusCode, 404);
     assert.equal(body.message, 'Show not found');
@@ -76,19 +86,14 @@ describe('shows integration tests', () => {
   it('Get a single show with invalid length id', async () => {
     await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .get(`${baseApiUrl}/${invalidId}`)
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.get(invalidId);
 
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
   });
 
   it('Create a show', async () => {
-    const { statusCode, body } = await request(app.server)
-      .post(baseApiUrl)
-      .send(showInput)
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.post(showInput);
 
     assert.equal(statusCode, 201);
     assert.equal(body.name, showInput.name);
@@ -97,10 +102,9 @@ describe('shows integration tests', () => {
   it('Update a show', async () => {
     const returnedShow = await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .patch(`${baseApiUrl}/${returnedShow._id}`)
-      .send({ name: 'Updated Show Name' })
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.patch(returnedShow._id, {
+      name: 'Updated Show Name',
+    });
 
     assert.equal(statusCode, 200);
     assert.equal(body.name, 'Updated Show Name');
@@ -110,10 +114,9 @@ describe('shows integration tests', () => {
   it('Update a show with non existing id', async () => {
     await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .patch(`${baseApiUrl}/${validId}`)
-      .send({ name: 'Updated Show Name' })
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.patch(validId, {
+      name: 'Updated Show Name',
+    });
 
     assert.equal(statusCode, 404);
     assert.equal(body.message, 'Show not found');
@@ -122,10 +125,9 @@ describe('shows integration tests', () => {
   it('Update a show with invalid length id', async () => {
     await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .patch(`${baseApiUrl}/${invalidId}`)
-      .send({ name: 'Updated Show Name' })
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.patch(invalidId, {
+      name: 'Updated Show Name',
+    });
 
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
@@ -134,10 +136,7 @@ describe('shows integration tests', () => {
   it('Delete a show', async () => {
     const returnedShow = await addShowToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .delete(`${baseApiUrl}/${returnedShow._id}`)
-      .send()
-      .set(authHeader);
+    const { statusCode, body } = await authRequest.delete(returnedShow._id);
 
     assert.equal(statusCode, 200);
     assert.equal(body.message, `Show id ${returnedShow._id} deleted`);
