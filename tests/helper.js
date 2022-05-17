@@ -10,6 +10,8 @@ const Show = require('../models/show.model');
 const db = require('./testdb');
 const { showInput, baseApiUrl, adminUser } = require('./dummyShows');
 
+const adminAccessToken = process.env.ADMIN_ACCESS_TOKEN;
+
 const AppPath = path.join(__dirname, '../', 'app.js');
 
 function config() {
@@ -52,14 +54,17 @@ const startApp = async () => {
   return app;
 };
 
-const setAuthHeader = async () => {
-  const adminAccessToken = await getAccessToken(adminUser);
-  const authHeader = { Authorization: `Bearer ${adminAccessToken}` };
+const setAuthHeader = async (permToken) => {
+  let token = permToken;
+  if (!token) {
+    token = await getAccessToken(adminUser);
+  }
+  const authHeader = { Authorization: `Bearer ${token}` };
   return authHeader;
 };
 
 const craftAuthRequest = async (app) => {
-  const authHeader = await setAuthHeader();
+  const authHeader = await setAuthHeader(adminAccessToken);
   const authRequest = (method, url, data) =>
     request(app.server)
       [method](baseApiUrl + url)
