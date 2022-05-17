@@ -38,8 +38,17 @@ const adminUser = {
   avatar: 'img.ip/464558.jpg',
 };
 
+const invalidId = '123';
+
+const validId = '1234567890abcdef12345678';
+
+const baseApiUrl = '/api/shows';
+
 module.exports = {
   showInput,
   showsPayload,
   adminUser,
+  invalidId,
+  validId,
+  baseApiUrl,
 };
