@@ -42,8 +42,7 @@ const getAccessToken = async (user) => {
 };
 
 const addShowInputToDb = async () => {
-  const input = showInput;
-  const newShow = new Show(input);
+  const newShow = new Show(showInput);
   const returnedShow = await newShow.save();
   return returnedShow;
 };
