@@ -1,35 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 /* global before, beforeEach, after, it, describe */
-const request = require('supertest');
 const assert = require('assert');
 const db = require('../testdb');
-const { build, getAccessToken, addShowToDb } = require('../helper');
-const {
-  adminUser,
-  showInput,
-  invalidId,
-  validId,
-  baseApiUrl,
-} = require('../dummyShows');
+const { addShowInputToDb, startApp, craftAuthRequest } = require('../helper');
+const { showInput, invalidId, validId } = require('../dummyShows');
 
 describe('shows integration tests', () => {
   let app;
   let path;
   let data;
-  let adminAccessToken;
-  let authHeader;
-
-  const authRequest = (method, url = path, body = data) =>
-    request(app.server)
-      [method](baseApiUrl + url)
-      .set(authHeader)
-      .send(body);
+  let authRequest;
 
   before(async () => {
-    app = await build();
-    await db.connect();
-    adminAccessToken = await getAccessToken(adminUser);
-    authHeader = { Authorization: `Bearer ${adminAccessToken}` };
+    app = await startApp();
+    authRequest = await craftAuthRequest(app);
   });
 
   beforeEach(async () => {
@@ -49,8 +33,8 @@ describe('shows integration tests', () => {
     assert.deepEqual(body, {});
   });
 
-  it('Get all shows when there are some', async () => {
-    await addShowToDb();
+  it('Get all shows when there is one', async () => {
+    await addShowInputToDb();
 
     path = '/';
     const { statusCode, body } = await authRequest('get', path);
@@ -61,7 +45,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show', async () => {
-    const returnedShow = await addShowToDb();
+    const returnedShow = await addShowInputToDb();
 
     path = `/${returnedShow._id}`;
     const { statusCode, body } = await authRequest('get', path);
@@ -71,7 +55,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show with non existing id', async () => {
-    await addShowToDb();
+    await addShowInputToDb();
 
     path = `/${validId}`;
     const { statusCode, body } = await authRequest('get', path);
@@ -81,7 +65,7 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show with invalid length id', async () => {
-    await addShowToDb();
+    await addShowInputToDb();
 
     path = `/${invalidId}`;
     const { statusCode, body } = await authRequest('get', path);
@@ -100,7 +84,7 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show', async () => {
-    const returnedShow = await addShowToDb();
+    const returnedShow = await addShowInputToDb();
 
     path = `/${returnedShow._id}`;
     data = { name: 'Updated Show Name' };
@@ -112,7 +96,7 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show with non existing id', async () => {
-    await addShowToDb();
+    await addShowInputToDb();
 
     path = `/${validId}`;
     data = { name: 'Updated Show Name' };
@@ -123,7 +107,7 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show with invalid length id', async () => {
-    await addShowToDb();
+    await addShowInputToDb();
 
     path = `/${invalidId}`;
     data = { name: 'Updated Show Name' };
@@ -134,7 +118,7 @@ describe('shows integration tests', () => {
   });
 
   it('Delete a show', async () => {
-    const returnedShow = await addShowToDb();
+    const returnedShow = await addShowInputToDb();
 
     path = `/${returnedShow._id}`;
     const { statusCode, body } = await authRequest('delete', path);
