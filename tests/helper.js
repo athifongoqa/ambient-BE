@@ -8,7 +8,7 @@ const request = require('supertest');
 const jwt = require('../plugins/jwt');
 const Show = require('../models/show.model');
 const db = require('./testdb');
-const { showInput, baseApiUrl, adminUser } = require('./dummyShows');
+const { showInput, baseUrl, adminUser } = require('./dummyShows');
 
 const adminAccessToken = process.env.ADMIN_ACCESS_TOKEN;
 
@@ -64,11 +64,13 @@ const setAuthHeader = async (permToken) => {
 };
 
 const craftAuthRequest = async (app) => {
-  const authHeader = await setAuthHeader(adminAccessToken);
+  const header = await setAuthHeader(adminAccessToken);
+  const { server } = app;
+
   const authRequest = (method, url, data) =>
-    request(app.server)
-      [method](baseApiUrl + url)
-      .set(authHeader)
+    request(server)
+      [method](baseUrl + url)
+      .set(header)
       .send(data);
   return authRequest;
 };

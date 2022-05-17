@@ -42,7 +42,7 @@ const invalidId = '123';
 
 const validId = '1234567890abcdef12345678';
 
-const baseApiUrl = '/api/shows';
+const baseUrl = '/api/shows';
 
 module.exports = {
   showInput,
@@ -50,5 +50,5 @@ module.exports = {
   adminUser,
   invalidId,
   validId,
-  baseApiUrl,
+  baseUrl,
 };
