@@ -16,6 +16,6 @@ module.exports = fp(async function (fastify, opts) {
   },
     // register a fastify url to start the redirect flow
     startRedirectPath: '/login/spotify',
-    callbackUri: `https://ambient-niqfhm2phq-ey.a.run.app/spotify/login/spotify/callback`
+    callbackUri: `http://0.0.0.0:3000/spotify/login/spotify/callback`
 })
 })
