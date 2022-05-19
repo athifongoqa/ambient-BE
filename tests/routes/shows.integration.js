@@ -1,20 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 /* global before, beforeEach, after, it, describe */
-const request = require('supertest');
 const assert = require('assert');
 const db = require('../testdb');
-const Show = require('../../models/show.model');
-const { build, getAccessToken } = require('../helper');
-const { showInput, adminUser } = require('../dummyShows');
+const { addShowInputToDb, startApp, craftAuthRequest } = require('../helper');
+const { showInput, invalidId, validId } = require('../dummyShows');
 
 describe('shows integration tests', () => {
   let app;
-  let adminAccessToken;
+  let path;
+  let data;
+  let authRequest;
 
   before(async () => {
-    app = await build();
-    await db.connect();
-    adminAccessToken = await getAccessToken(adminUser);
+    app = await startApp();
+    authRequest = await craftAuthRequest(app);
   });
 
   beforeEach(async () => {
@@ -27,21 +26,18 @@ describe('shows integration tests', () => {
   });
 
   it('Get all shows when there is none', async () => {
-    const { statusCode, body } = await request(app.server)
-      .get('/api/shows/')
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = '/';
+    const { statusCode, body } = await authRequest('get', path);
 
-    assert.equal(statusCode, 200);
-    assert.equal(body.length, 0);
+    assert.equal(statusCode, 204);
+    assert.deepEqual(body, {});
   });
 
-  it('Get all shows when there are some', async () => {
-    const show = new Show(showInput);
-    await show.save();
+  it('Get all shows when there is one', async () => {
+    await addShowInputToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .get('/api/shows/')
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = '/';
+    const { statusCode, body } = await authRequest('get', path);
 
     assert.equal(statusCode, 200);
     assert.equal(body.length, 1);
@@ -49,56 +45,50 @@ describe('shows integration tests', () => {
   });
 
   it('Get a single show', async () => {
-    const show = new Show(showInput);
-    const returnedShow = await show.save();
+    const returnedShow = await addShowInputToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .get(`/api/shows/${returnedShow._id}`)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = `/${returnedShow._id}`;
+    const { statusCode, body } = await authRequest('get', path);
 
     assert.equal(statusCode, 200);
     assert.equal(body.name, showInput.name);
   });
 
   it('Get a single show with non existing id', async () => {
-    const show = new Show(showInput);
-    await show.save();
+    await addShowInputToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .get('/api/shows/1234567890abcdef12345678')
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = `/${validId}`;
+    const { statusCode, body } = await authRequest('get', path);
 
     assert.equal(statusCode, 404);
     assert.equal(body.message, 'Show not found');
   });
 
   it('Get a single show with invalid length id', async () => {
-    const { statusCode, body } = await request(app.server)
-      .get('/api/shows/123')
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    await addShowInputToDb();
+
+    path = `/${invalidId}`;
+    const { statusCode, body } = await authRequest('get', path);
 
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
   });
 
   it('Create a show', async () => {
-    const { statusCode, body } = await request(app.server)
-      .post('/api/shows/')
-      .send(showInput)
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = '/';
+    data = showInput;
+    const { statusCode, body } = await authRequest('post', path, data);
 
     assert.equal(statusCode, 201);
     assert.equal(body.name, showInput.name);
   });
 
   it('Update a show', async () => {
-    const show = new Show(showInput);
-    const returnedShow = await show.save();
+    const returnedShow = await addShowInputToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .patch(`/api/shows/${returnedShow._id}`)
-      .send({ name: 'Updated Show Name' })
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = `/${returnedShow._id}`;
+    data = { name: 'Updated Show Name' };
+    const { statusCode, body } = await authRequest('patch', path, data);
 
     assert.equal(statusCode, 200);
     assert.equal(body.name, 'Updated Show Name');
@@ -106,36 +96,32 @@ describe('shows integration tests', () => {
   });
 
   it('Update a show with non existing id', async () => {
-    const show = new Show(showInput);
-    await show.save();
+    await addShowInputToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .patch('/api/shows/1234567890abcdef12345678')
-      .send({ name: 'Updated Show Name' })
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = `/${validId}`;
+    data = { name: 'Updated Show Name' };
+    const { statusCode, body } = await authRequest('patch', path, data);
 
     assert.equal(statusCode, 404);
     assert.equal(body.message, 'Show not found');
   });
 
   it('Update a show with invalid length id', async () => {
-    const { statusCode, body } = await request(app.server)
-      .patch('/api/shows/123')
-      .send({ name: 'Updated Show Name' })
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    await addShowInputToDb();
+
+    path = `/${invalidId}`;
+    data = { name: 'Updated Show Name' };
+    const { statusCode, body } = await authRequest('patch', path, data);
 
     assert.equal(statusCode, 500);
     assert.equal(body.message, 'The server returned an error');
   });
 
   it('Delete a show', async () => {
-    const show = new Show(showInput);
-    const returnedShow = await show.save();
+    const returnedShow = await addShowInputToDb();
 
-    const { statusCode, body } = await request(app.server)
-      .delete(`/api/shows/${returnedShow._id}`)
-      .send()
-      .set({ Authorization: `Bearer ${adminAccessToken}` });
+    path = `/${returnedShow._id}`;
+    const { statusCode, body } = await authRequest('delete', path);
 
     assert.equal(statusCode, 200);
     assert.equal(body.message, `Show id ${returnedShow._id} deleted`);

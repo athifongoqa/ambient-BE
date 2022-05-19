@@ -2,7 +2,7 @@ const returnedShow = {
   type: 'object',
   properties: {
     _id: { type: 'string' },
-    creator_id: { type: 'string', format: 'uuid' },
+    creator_id: { type: 'string' },
     name: { type: 'string' },
     description: { type: 'string' },
     type: { type: 'string' },
@@ -19,7 +19,7 @@ const returnedShow = {
 const show = {
   type: 'object',
   properties: {
-    creator_id: { type: 'string', format: 'uuid' },
+    creator_id: { type: 'string', pattern: '^[0-9a-f]{24}$' },
     name: { type: 'string', example: 'New Show Name' },
     description: { type: 'string', example: 'New Show Description' },
     date_created: { type: 'string', format: 'date-time' },
@@ -34,6 +34,10 @@ const getShowsOpts = {
       description: 'Get all shows',
       type: 'array',
       items: returnedShow,
+    },
+    204: {
+      description: 'Get all shows',
+      type: 'object',
     },
     404: {
       description: 'No shows found',

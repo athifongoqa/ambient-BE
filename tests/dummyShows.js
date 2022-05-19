@@ -1,5 +1,5 @@
 const showInput = {
-  creator_id: '12345678-90ab-cdef-1234-567890abcdef',
+  creator_id: '1234567890abcdef12345678',
   name: 'Test Show Name',
   description: 'Test show description',
   date_created: '2020-01-01T20:00:00.000Z',
@@ -9,7 +9,7 @@ const showInput = {
 const showsPayload = [
   {
     _id: '1234567890abcdef01234567',
-    creator_id: '12345678-90ab-cdef-1234-567890abcdef',
+    creator_id: '1234567890abcdef12345678',
     name: 'Test Show Name',
     description: 'Test show description',
     type: 'test type',
@@ -20,7 +20,7 @@ const showsPayload = [
   },
   {
     _id: 'fedcba0987654321fedcba09',
-    creator_id: 'fedcba98-7654-3210-fedc-ba9876543210',
+    creator_id: '1234567890abcdef12345678',
     name: 'Test Show Name 2',
     description: 'Test show description 2',
     type: 'test type 2',
@@ -38,8 +38,17 @@ const adminUser = {
   avatar: 'img.ip/464558.jpg',
 };
 
+const invalidId = '123';
+
+const validId = '1234567890abcdef12345678';
+
+const baseUrl = '/api/shows';
+
 module.exports = {
   showInput,
   showsPayload,
   adminUser,
+  invalidId,
+  validId,
+  baseUrl,
 };
