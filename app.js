@@ -2,14 +2,13 @@ const path = require('path');
 const AutoLoad = require('fastify-autoload');
 const mongoose = require('mongoose');
 const boom = require('boom');
+const helmet = require('@fastify/helmet')
 
 module.exports = async function (fastify, opts) {
   try {
     await mongoose.connect(process.env.MONGODB);
 
-    // disabled due to conflict with Swagger
-    // fastify.register(require('@fastify/cors'))
-    // fastify.register(require('@fastify/helmet'))
+    fastify.register(require('@fastify/cors'))
     fastify.register(require('fastify-formbody'))
     fastify.register(require('fastify-sensible'), {
       errorHandler: false
