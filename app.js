@@ -2,7 +2,6 @@ const path = require('path');
 const AutoLoad = require('fastify-autoload');
 const mongoose = require('mongoose');
 const boom = require('boom');
-const helmet = require('@fastify/helmet')
 
 module.exports = async function (fastify, opts) {
   try {
