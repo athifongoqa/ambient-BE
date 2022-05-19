@@ -7,23 +7,13 @@ const user = require('../../controllers/users')
 let app;
 let adminAccessToken;
 
-function createDummyUser(username, displayName, email, avatar, role) {
-  return {
-    username: username,
-    displayName: displayName,
-    email: email,
-    avatar: avatar,
-    role: role
-  };
-}
-
-adminUser = createDummyUser(
-  'master',
-  'master',
-  'master.dummy@code.berlin',
-  'img.ip/464558.jpg',
-  'admin'
-);
+adminUser = {
+  username:'master',
+  displayName: 'master',
+  email: 'master.dummy@code.berlin',
+  avatar: 'img.ip/464558.jpg',
+  role: 'admin'
+};
 
 beforeAll(async () => {
   app = await build();
@@ -41,21 +31,21 @@ afterAll(async () => {
 }, 30000);
 
 describe('User endpoint integration tests', () => {
-  const dummyMemberOne = createDummyUser(
-    'dummyOne',
-    'Dumb',
-    'dummyMember123.dummy@code.berlin',
-    'img.ip/464558.jpg',
-    'member',
-  );
+  const dummyMemberOne = {
+    username: 'dummyOne',
+    displayName: 'Dumb',
+    email: 'dummyMember123.dummy@code.berlin',
+    avatar: 'img.ip/464558.jpg',
+    role: 'member',
+  };
 
-  const dummyMemberTwo = createDummyUser(
-    'dummyTwo',
-    'Dumb Dumb',
-    'dummyMember1234.dummy@code.berlin',
-    'img.ip/464559.jpg',
-    'member',
-  );
+  const dummyMemberTwo = {
+    username: 'dummyTwo',
+    displayName: 'Dumb Dumb',
+    email: 'dummyMember1234.dummy@code.berlin',
+    avatar: 'img.ip/464559.jpg',
+    role: 'member',
+  };
 
   const dummyMemberOnePayload = {
     _id: expect.any(String),
