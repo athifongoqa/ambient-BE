@@ -11,16 +11,13 @@ async function addNewUser(req, reply) {
     const foundUser = await User.findOne({username: req.body.username})
     let user;
 
-    if (foundUser) {
-      user = foundUser
-    } 
-
     if (!foundUser) {
       const newUser = new User(req.body);
-      user = await newUser.save();
+      return user = await newUser.save();
     }
 
-    return user
+    return user = foundUser
+
   } catch (err) {
     throw boom.boomify(err);
   }

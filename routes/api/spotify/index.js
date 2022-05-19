@@ -6,7 +6,6 @@ module.exports = async (fastify) => {
     const user = await getSpotifyUser(accessToken);
 
     const userJWT = await fastify.signIn({ body: user });
-    console.log('internal token', userJWT);
     reply.send({ internalJWT: userJWT });
   });
 };
