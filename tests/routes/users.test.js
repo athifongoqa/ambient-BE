@@ -102,6 +102,18 @@ describe('User endpoint integration tests', () => {
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
     });
+
+    it('should restrict unauthenticated request to GET all users', async () => {
+      await addNewUser({body: dummyMemberOne})
+      await addNewUser({body: dummyMemberTwo})
+  
+      const { body, statusCode } = await request(app.server)
+      .get('/api/users/')
+      
+      expect(statusCode).toBe(200);
+      expect(body).toBeInstanceOf(Object);
+      expect(body).toMatchObject({});
+    });
     
     it('should DELETE a single user', async () => {
       const newUser = await addNewUser({ body: dummyMemberTwo });
