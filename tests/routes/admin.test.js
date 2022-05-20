@@ -1,10 +1,7 @@
 const request = require('supertest');
 const { build, getAccessToken } = require('../helper');
 const db = require('../testdb');
-const users = require('../../controllers/users');
-const Fastify = require('fastify')
-const jwt = require('../../plugins/jwt')
-const user = require('../../controllers/users')
+const { addNewUser } = require('../../controllers/users');
 
 let app;
 let adminAccessToken;
@@ -41,8 +38,8 @@ describe('E2E Admin endpoints', () => {
     role: 'member',
   };
   
-  it('should GET all admin users', async () => {
-    await users.addNewUser({body: dummyMemberTwo})
+  it('should GET all admin user', async () => {
+    await addNewUser({body: dummyMemberTwo})
 
     const { body, statusCode } = await request(app.server)
     .get('/api/admin/')
@@ -53,7 +50,7 @@ describe('E2E Admin endpoints', () => {
   });
 
   it(`should UPDATE a single user's role from member to admin`, async () => {
-    const newUser = await user.addNewUser({ body: dummyMemberTwo });
+    const newUser = await addNewUser({ body: dummyMemberTwo });
 
     const { body, statusCode } = await request(app.server)
       .patch(`/api/admin/${newUser.username}`)
