@@ -94,6 +94,14 @@ describe('User endpoint integration tests', () => {
     expect(body).toMatchObject(dummyMemberOnePayload);
     });
 
+  it('should fail to GET a single user with unknown username', async () => {    
+    const { body, statusCode } = await request(app.server)
+    .get(`/api/users/thisShouldFail`)
+    .set({ Authorization: `Bearer ${adminAccessToken}` })
+    
+    expect(statusCode).toBe(500);
+    });
+
   it('should GET and return an empty users object', async () => {    
     const { body, statusCode } = await request(app.server)
     .get(`/api/users/`)
