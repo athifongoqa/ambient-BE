@@ -16,11 +16,10 @@ module.exports = fp(async function(fastify, opts) {
 
   fastify.decorate("signIn", async function(req, reply) {
     try {
-        const token = await addNewUser({body: req.body})
+        return token = await addNewUser({body: req.body})
         .then(user => {
             return unwrappedToken = fastify.jwt.sign({ _id: user._id, role: user.role})
         })
-        return token
     } catch (err) {
         return err
     }
