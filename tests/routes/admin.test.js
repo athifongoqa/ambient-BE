@@ -29,7 +29,7 @@ afterAll(async () => {
   await db.closeDatabase();
 }, 30000);
 
-describe('E2E Admin endpoints', () => {
+describe('Admin endpoint integration test', () => {
   const dummyMemberTwo = {
     username: 'dummyTwo',
     displayName: 'Dumb Dumb',
@@ -38,7 +38,7 @@ describe('E2E Admin endpoints', () => {
     role: 'member',
   };
   
-  it('should GET all admin user', async () => {
+  it('should GET all admin users', async () => {
     await addNewUser({body: dummyMemberTwo})
 
     const { body, statusCode } = await request(app.server)
