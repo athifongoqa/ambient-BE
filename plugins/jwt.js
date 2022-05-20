@@ -1,5 +1,5 @@
 const fp = require("fastify-plugin")
-const userController = require('../controllers/users')
+const { addNewUser } = require('../controllers/users')
 
 module.exports = fp(async function(fastify, opts) {
   fastify.register(require("fastify-jwt"), {
@@ -16,7 +16,7 @@ module.exports = fp(async function(fastify, opts) {
 
   fastify.decorate("signIn", async function(req, reply) {
     try {
-        const token = await userController.addNewUser({body: req.body})
+        const token = await addNewUser({body: req.body})
         .then(user => {
             let token = fastify.jwt.sign({ _id: user._id, role: user.role})
             return token
