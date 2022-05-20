@@ -91,6 +91,16 @@ describe('User endpoint integration tests', () => {
     
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
+    expect(body).toMatchObject(dummyMemberOnePayload);
+    });
+
+  it('should GET and return an empty users object', async () => {    
+    const { body, statusCode } = await request(app.server)
+    .get(`/api/users/`)
+    .set({ Authorization: `Bearer ${adminAccessToken}` })
+    
+    expect(statusCode).toBe(200);
+    expect(body).toBeInstanceOf(Object);
     });
     
     it('should DELETE a single user', async () => {
