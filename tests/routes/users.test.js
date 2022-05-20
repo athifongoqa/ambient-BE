@@ -65,7 +65,6 @@ describe('User endpoint integration tests', () => {
     .set({ Authorization: `Bearer ${adminAccessToken}` });
     
     expect(statusCode).toBe(200);
-    console.log(body)
     expect(body).toBeInstanceOf(Object);
     expect(body).toEqual(dummyMemberOnePayload);
   });

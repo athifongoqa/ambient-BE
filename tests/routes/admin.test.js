@@ -42,29 +42,23 @@ describe('E2E Admin endpoints', () => {
   };
   
   it('should GET all admin users', async () => {
-    // Given  
     await users.addNewUser({body: dummyMemberTwo})
 
-    // When
     const { body, statusCode } = await request(app.server)
     .get('/api/admin/')
     .set({ Authorization: `Bearer ${adminAccessToken}` })
     
-    // Then
     expect(statusCode).toBe(200);
-    console.log(body)
     expect(body).toBeInstanceOf(Object);
   });
 
   it(`should UPDATE a single user's role from member to admin`, async () => {
-    // Given
     const newUser = await user.addNewUser({ body: dummyMemberTwo });
-    // When
+
     const { body, statusCode } = await request(app.server)
       .patch(`/api/admin/${newUser.username}`)
       .set({ Authorization: `Bearer ${adminAccessToken}` });
 
-    // Then
     expect(statusCode).toBe(200);
     expect(body).toBeInstanceOf(Object);
     expect(body.message).toMatch(`${newUser.username} has been updated to admin.`);
