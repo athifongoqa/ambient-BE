@@ -18,8 +18,7 @@ module.exports = fp(async function(fastify, opts) {
     try {
         const token = await addNewUser({body: req.body})
         .then(user => {
-            let token = fastify.jwt.sign({ _id: user._id, role: user.role})
-            return token
+            return unwrappedToken = fastify.jwt.sign({ _id: user._id, role: user.role})
         })
         return token
     } catch (err) {
