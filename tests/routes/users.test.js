@@ -1,8 +1,7 @@
 const request = require('supertest');
 const { build, getAccessToken } = require('../helper');
 const db = require('../testdb');
-const users = require('../../controllers/users');
-const user = require('../../controllers/users')
+const { addNewUser } = require('../../controllers/users');
 
 let app;
 let adminAccessToken;
@@ -70,8 +69,8 @@ describe('User endpoint integration tests', () => {
   });
   
   it('should GET all users', async () => {
-    await users.addNewUser({body: dummyMemberOne})
-    await users.addNewUser({body: dummyMemberTwo})
+    await addNewUser({body: dummyMemberOne})
+    await addNewUser({body: dummyMemberTwo})
 
     const { body, statusCode } = await request(app.server)
     .get('/api/users/')
@@ -84,7 +83,7 @@ describe('User endpoint integration tests', () => {
   });
   
   it('should GET a single user', async () => {
-    await user.addNewUser({ body: dummyMemberOne });
+    await addNewUser({ body: dummyMemberOne });
     
     const { body, statusCode } = await request(app.server)
     .get(`/api/users/${dummyMemberOne.username}`)
@@ -95,7 +94,7 @@ describe('User endpoint integration tests', () => {
     });
     
     it('should DELETE a single user', async () => {
-      const newUser = await user.addNewUser({ body: dummyMemberTwo });
+      const newUser = await addNewUser({ body: dummyMemberTwo });
 
       const { body, statusCode } = await request(app.server)
       .delete(`/api/users/${newUser._id}`)
@@ -107,7 +106,7 @@ describe('User endpoint integration tests', () => {
   });
   
   it('should UPDATE a single user', async () => {
-    const newUser = await user.addNewUser({ body: dummyMemberTwo });
+    const newUser = await addNewUser({ body: dummyMemberTwo });
     const newDisplayName = 'Ronald';
 
     const { body, statusCode } = await request(app.server)
