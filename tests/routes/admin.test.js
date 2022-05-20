@@ -9,23 +9,13 @@ const user = require('../../controllers/users')
 let app;
 let adminAccessToken;
 
-function createDummyUser(username, displayName, email, avatar, role) {
-  return {
-    username: username,
-    displayName: displayName,
-    email: email,
-    avatar: avatar,
-    role: role
-  };
-}
-
-adminUser = createDummyUser(
-  'master',
-  'master',
-  'master.dummy@code.berlin',
-  'img.ip/464558.jpg',
-  'admin'
-);
+adminUser = {
+  username:'master',
+  displayName: 'master',
+  email: 'master.dummy@code.berlin',
+  avatar: 'img.ip/464558.jpg',
+  role: 'admin'
+};
 
 beforeAll(async () => {
   app = await build();
@@ -43,17 +33,17 @@ afterAll(async () => {
 }, 30000);
 
 describe('E2E Admin endpoints', () => {
-  const dummy2 = createDummyUser(
-    'dummyTwo',
-    'Dumb Dumb',
-    'dummy1234.dummy@code.berlin',
-    'img.ip/464559.jpg',
-    'member',
-  );
+  const dummyMemberTwo = {
+    username: 'dummyTwo',
+    displayName: 'Dumb Dumb',
+    email: 'dummyMember1234.dummy@code.berlin',
+    avatar: 'img.ip/464559.jpg',
+    role: 'member',
+  };
   
   it('should GET all admin users', async () => {
     // Given  
-    await users.addNewUser({body: dummy2})
+    await users.addNewUser({body: dummyMemberTwo})
 
     // When
     const { body, statusCode } = await request(app.server)
@@ -68,7 +58,7 @@ describe('E2E Admin endpoints', () => {
 
   it(`should UPDATE a single user's role from member to admin`, async () => {
     // Given
-    const newUser = await user.addNewUser({ body: dummy2 });
+    const newUser = await user.addNewUser({ body: dummyMemberTwo });
     // When
     const { body, statusCode } = await request(app.server)
       .patch(`/api/admin/${newUser.username}`)
